@@ -1,33 +1,34 @@
 # Aragon_Conviction_Voting
 
-[Conviction Voting](https://medium.com/giveth/conviction-voting-a-novel-continuous-decision-making-alternative-to-governance-aa746cfb9475) is a novel decision making process where votes express their preference for which proposals they would like to see approved in a continuous rather than discrete way. The longer the community keeps a preference on an individual proposal, the “stronger” the proposal conviction becomes. In the conviction voting model, a graph structure is used to record the the introduction and removal of participants, candidates, proposals, and their outcomes.
+[Conviction Voting](https://medium.com/commonsstack/conviction-voting-a-novel-continuous-decision-making-alternative-to-governance-62e215ad2b3d) is a novel decision making process used to estimate real-time collective preference in distributed work proposal systems. Voters continuously express their preference by staking tokens in favor of proposals they would like to see approved, with the conviction (i.e. weight) of their vote growing over time. Collective conviction accumulates until it reaches a set threshold specified by a proposal according to how much funding it is requesting, at which point it passes and funds are released from the funding pool so work may begin. Conviction voting improves on discrete voting processes by allowing participants to vote at any time, and moves from consensus to consent based decision making. This eliminates the governance bottleneck of large distributed communities, where a quorum of participants may be required to vote on every proposal. 
 
-## What is cadCAD?
+In the conviction voting model, a graph structure is used to record the interaction of participants, candidates, proposals, and their outcomes.
+
+
+## Simulations
+
+*TBD
+
+## Background information & concepts addressed
+
+### What is cadCAD?
 cadCAD (complex adaptive dynamics Computer-Aided Design) is a python based modeling framework for research, validation, and Computer Aided Design of complex systems. Given a model of a complex system, cadCAD can simulate the impact that a set of actions might have on it. This helps users make informed, rigorously tested decisions on how best to modify or interact with the system in order to achieve their goals. cadCAD supports different system modeling approaches and can be easily integrated with common empirical data science workflows. Monte Carlo methods, A/B testing and parameter sweeping features are natively supported and optimized for.
 
+cadCAD links:
+* https://community.cadcad.org/t/introduction-to-cadcad/15
+* https://community.cadcad.org/t/putting-cadcad-in-context/19
+* https://github.com/BlockScience/cadCAD/tree/master/tutorials
 
-## Reproducibility
+### Reproducibility
 In order to reperform this code, we recommend the researcher use the following link to download https://www.anaconda.com/products/individual to download Python 3.7.To install the specific version of cadCAD this repository was built with, run the following code:
 pip install cadCAD==0.4.17
 
 Then run cd Aragon_Conviction_Voting to enter the repository. Finally, run jupyter notebook to open a notebook server to run the various notebooks in this repository.
 
-## Simulations
-
-
-## Background information & concepts addressed
-
 
 ### Systems Thinking
 * https://community.cadcad.org/t/introduction-to-systems-thinking/18
 * https://community.cadcad.org/t/working-glossary-of-systems-concepts/17
-
-
-### cadCAD
-
-* https://community.cadcad.org/t/introduction-to-cadcad/15
-* https://community.cadcad.org/t/putting-cadcad-in-context/19
-* https://github.com/BlockScience/cadCAD/tree/master/tutorials
 
 
 ### Token Engineering
