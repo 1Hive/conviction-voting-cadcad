@@ -10,15 +10,10 @@ from cadCAD.configuration.utils import bound_norm_random, ep_time_step, config_s
 from .genesis_states import genesis_states
 from .partial_state_update_block import partial_state_update_blocks
 
-params: Dict[str, List[int]] = {
-    'month': [0,12,36,50,100]
-}
-
 
 sim_config = config_sim({
     'N': 1,
     'T': range(100), #day 
-    # 'M': #params,
 })
 
 seeds = {

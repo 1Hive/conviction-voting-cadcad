@@ -11,15 +11,7 @@ default_rho = 0.02
 
 def trigger_threshold(requested, funds, supply, beta = default_beta, rho = default_rho):
     '''
-    Definition:
-
-    Parameters:
-
-    Assumptions:
-
-    Returns:
-
-    Example:
+    Function that determines threshold for proposals being accepted. 
     '''
     share = requested/funds
     if share < beta:
@@ -29,16 +21,7 @@ def trigger_threshold(requested, funds, supply, beta = default_beta, rho = defau
 
 def initial_social_network(network, scale = 1, sigmas=3):
     '''
-    Definition:
-    Function to initialize network x object
-
-    Parameters:
-
-    Assumptions:
-
-    Returns:
-
-    Example:
+    Function to initialize network x social network edges
     '''
     participants = get_nodes_by_type(network, 'participant')
     
@@ -55,15 +38,7 @@ def initial_social_network(network, scale = 1, sigmas=3):
 def initial_conflict_network(network, rate = .25):
     '''
     Definition:
-    Function to initialize network x object
-
-    Parameters:
-
-    Assumptions:
-
-    Returns:
-
-    Example:
+    Function to initialize network x conflict edges
     '''
     proposals = get_nodes_by_type(network, 'proposal')
     
@@ -189,32 +164,14 @@ def get_nodes_by_type(g, node_type_selection):
 
 def get_edges_by_type(g, edge_type_selection):
     '''
-    Definition:
-    Function to initialize network x object
-
-    Parameters:
-
-    Assumptions:
-
-    Returns:
-
-    Example:
+    Functions to extract edges based on type
     '''
     return [edge for edge in g.edges if g.edges[edge]['type']== edge_type_selection ]
 
 
 def conviction_order(network, proposals):
     '''
-    Definition:
-    Function to initialize network x object
-
-    Parameters:
-
-    Assumptions:
-
-    Returns:
-
-    Example:
+    Function to sort conviction order
     '''
     ordered = sorted(proposals, key=lambda j:network.nodes[j]['conviction'] , reverse=True)
     
@@ -224,16 +181,6 @@ def conviction_order(network, proposals):
 
 def social_links(network, participant, scale = 1):
     '''
-    Definition:
-    Function to initialize network x object
-
-    Parameters:
-
-    Assumptions:
-
-    Returns:
-
-    Example:
     '''
     
     participants = get_nodes_by_type(network, 'participant')
@@ -251,16 +198,6 @@ def social_links(network, participant, scale = 1):
 
 def conflict_links(network,proposal ,rate = .25):
     '''
-    Definition:
-    Function to initialize network x object
-
-    Parameters:
-
-    Assumptions:
-
-    Returns:
-
-    Example:
     '''
     
     proposals = get_nodes_by_type(network, 'proposal')
@@ -277,16 +214,6 @@ def conflict_links(network,proposal ,rate = .25):
 
 def social_affinity_booster(network, proposal, participant):
     '''
-    Definition:
-    Function to initialize network x object
-
-    Parameters:
-
-    Assumptions:
-
-    Returns:
-
-    Example:
     '''
     
     participants = get_nodes_by_type(network, 'participant')
@@ -313,117 +240,8 @@ def social_affinity_booster(network, proposal, participant):
     return np.sum(boosts)
     
 
-def trigger_sweep(field, trigger_func,xmax=.2,default_alpha=.5):
-    '''
-    Definition:
-    Function to initialize network x object
-
-    Parameters:
-
-    Assumptions:
-
-    Returns:
-
-    Example:
-    '''
-    
-    if field == 'token_supply':
-        alpha = default_alpha
-        share_of_funds = np.arange(.001,xmax,.001)
-        total_supply = np.arange(0,10**9, 10**6) 
-        demo_data_XY = np.outer(share_of_funds,total_supply)
-
-        demo_data_Z0=np.empty(demo_data_XY.shape)
-        demo_data_Z1=np.empty(demo_data_XY.shape)
-        demo_data_Z2=np.empty(demo_data_XY.shape)
-        demo_data_Z3=np.empty(demo_data_XY.shape)
-        for sof_ind in range(len(share_of_funds)):
-            sof = share_of_funds[sof_ind]
-            for ts_ind in range(len(total_supply)):
-                ts = total_supply[ts_ind]
-                tc = ts /(1-alpha)
-                trigger = trigger_func(sof, 1, ts)
-                demo_data_Z0[sof_ind,ts_ind] = np.log10(trigger)
-                demo_data_Z1[sof_ind,ts_ind] = trigger
-                demo_data_Z2[sof_ind,ts_ind] = trigger/tc #share of maximum possible conviction
-                demo_data_Z3[sof_ind,ts_ind] = np.log10(trigger/tc)
-        return {'log10_trigger':demo_data_Z0,
-                'trigger':demo_data_Z1,
-                'share_of_max_conv': demo_data_Z2,
-                'log10_share_of_max_conv':demo_data_Z3,
-                'total_supply':total_supply,
-                'share_of_funds':share_of_funds}
-    elif field == 'alpha':
-        alpha = np.arange(.5,1,.01)
-        share_of_funds = np.arange(.001,xmax,.001)
-        total_supply = 10**9
-        demo_data_XY = np.outer(share_of_funds,alpha)
-
-        demo_data_Z4=np.empty(demo_data_XY.shape)
-        demo_data_Z5=np.empty(demo_data_XY.shape)
-        demo_data_Z6=np.empty(demo_data_XY.shape)
-        demo_data_Z7=np.empty(demo_data_XY.shape)
-        for sof_ind in range(len(share_of_funds)):
-            sof = share_of_funds[sof_ind]
-            for a_ind in range(len(alpha)):
-                ts = total_supply
-                a = alpha[a_ind]
-                tc = ts /(1-a)
-                trigger = trigger_func(sof, 1, ts)
-                demo_data_Z4[sof_ind,a_ind] = np.log10(trigger)
-                demo_data_Z5[sof_ind,a_ind] = trigger
-                demo_data_Z6[sof_ind,a_ind] = trigger/tc #share of maximum possible conviction
-                demo_data_Z7[sof_ind,a_ind] = np.log10(trigger/tc)
-        
-        return {'log10_trigger':demo_data_Z4,
-               'trigger':demo_data_Z5,
-               'share_of_max_conv': demo_data_Z6,
-               'log10_share_of_max_conv':demo_data_Z7,
-               'alpha':alpha,
-               'share_of_funds':share_of_funds}
-        
-    else:
-        return "invalid field"
-    
-def trigger_plotter(share_of_funds,Z, color_label,y, ylabel,cmap='jet'):
-    '''
-    Definition:
-    Function to initialize network x object
-
-    Parameters:
-
-    Assumptions:
-
-    Returns:
-
-    Example:
-    '''
-    dims = (10, 5)
-    fig, ax = plt.subplots(figsize=dims)
-
-    cf = plt.contourf(share_of_funds, y, Z.T, 100, cmap=cmap)
-    cbar=plt.colorbar(cf)
-    plt.axis([share_of_funds[0], share_of_funds[-1], y[0], y[-1]])
-    #ax.set_xscale('log')
-    plt.ylabel(ylabel)
-    plt.xlabel('Share of Funds Requested')
-    plt.title('Trigger Function Map')
-
-    cbar.ax.set_ylabel(color_label)
-    
-
 def snap_plot(nets, size_scale = 1/500, ani = False, dims = (20,20), savefigs=False):
     '''
-    Definition:
-    Function to initialize network x object
-
-    Parameters:
-
-    Assumptions:
-
-    Returns:
-
-    Example:
     '''
 
     last_net = nets[-1]
@@ -556,16 +374,6 @@ def snap_plot(nets, size_scale = 1/500, ani = False, dims = (20,20), savefigs=Fa
 
 def pad(vec, length,fill=True):
     '''
-    Definition:
-    Function to initialize network x object
-
-    Parameters:
-
-    Assumptions:
-
-    Returns:
-
-    Example:
     '''
     
     if fill:
@@ -581,16 +389,6 @@ def pad(vec, length,fill=True):
 
 def make2D(key, data, fill=False):
     '''
-    Definition:
-    Function to initialize network x object
-
-    Parameters:
-
-    Assumptions:
-
-    Returns:
-
-    Example:
     '''
     maxL = data[key].apply(len).max()
     newkey = 'padded_'+key

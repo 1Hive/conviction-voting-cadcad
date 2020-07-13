@@ -6,7 +6,7 @@ import numpy as np
 from .conviction_helper_functions import * 
 
 # Parameters
-#maximum share of funds a proposal can take
+# maximum share of funds a proposal can take
 beta = .2 #later we should set this to be param so we can sweep it
 # tuning param for the trigger function
 rho = .001
@@ -20,16 +20,13 @@ m= 3 #initial proposals
 initial_sentiment = .6
 
 theta =.35
-kappa = 6 #bonding curve curvature
 alpha = 0.5
-sale_price = .1
 sensitivity = .75
 tmin = 7 #unit days; minimum periods passed before a proposal can pass
 min_supp = 50 #number of tokens that must be stake for a proposal to be a candidate
 sentiment_decay = .01 #termed mu in the state update function
 base_completion_rate = 100
 base_failure_rate = 200 
-# trigger_func = trigger_threshold
 tax_rate = .02
 
 initial_funds = 40781.42

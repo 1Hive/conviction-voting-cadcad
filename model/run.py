@@ -25,6 +25,7 @@ def run(input_config=configs):
 
 def postprocessing(df):
     '''
+    Function for postprocessing the simulation results to extract key information from the network object. 
     '''
     # Extract information from dataframe
     df['conviction'] = df.network.apply(lambda g: np.array([g.nodes[j]['conviction'] for j in get_nodes_by_type(g, 'proposal') if g.nodes[j]['status']=='candidate']))
@@ -55,6 +56,7 @@ def postprocessing(df):
 
     df['conviction_share_of_trigger_all'] = df.conviction_all/df.triggers_all
 
+    # subset to last substep of each simulation
     rdf= df[df.substep==df.substep.max()].copy()
 
     return df,rdf

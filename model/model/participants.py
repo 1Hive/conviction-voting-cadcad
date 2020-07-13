@@ -3,7 +3,6 @@ import numpy as np
 from .initialization import *
 from .conviction_helper_functions import * 
 import networkx as nx
-# from scipy.stats import expon, gamma
 
 
 # Phase 2
@@ -36,7 +35,7 @@ def check_progress(params, step, sL, s):
 # Mechanisms
 def complete_proposal(params, step, sL, s, _input):
     '''
-     Book-keeping
+     Book-keeping of failed and completed proposals. Update network object
      '''
     
     network = s['network']

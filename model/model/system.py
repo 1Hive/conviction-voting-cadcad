@@ -11,7 +11,10 @@ sentiment = 0.6
 
 
 # Behaviors
-def driving_process(params, step, sL, s):    
+def driving_process(params, step, sL, s):
+    '''
+    Driving process for adding new participants (their funds) and new proposals.
+    '''
     arrival_rate = 10/(1+sentiment)
     rv1 = np.random.rand()
     new_participant = bool(rv1<1/arrival_rate)
@@ -61,6 +64,9 @@ def driving_process(params, step, sL, s):
     
 # Mechanisms 
 def update_network(params, step, sL, s, _input):
+    '''
+    Add new participants and proposals to network object
+    '''
 
     network = s['network']
     funds = s['funds']
@@ -93,7 +99,9 @@ def update_network(params, step, sL, s, _input):
     return (key, value)
 
 def increment_funds(params, step, sL, s, _input):
-    
+    '''
+    Increase funds by the amount of the new particpant's funds.
+    '''
     funds = s['funds']
     funds_arrival = _input['funds_arrival']
 

@@ -11,6 +11,7 @@ tmin = 7
 # Behaviors
 def trigger_function(params, step, sL, s):
     '''
+    This policy checks to see if each proposal passes or not. 
     '''
     network = s['network']
     funds = s['funds']
@@ -53,6 +54,7 @@ def trigger_function(params, step, sL, s):
 # Mechanisms
 def decrement_funds(params, step, sL, s, _input):
     '''
+    If a proposal passes, funds are decremented by the amount of the proposal
     '''
     
     funds = s['funds']
@@ -70,6 +72,7 @@ def decrement_funds(params, step, sL, s, _input):
 
 def update_proposals(params, step, sL, s, _input):
     '''
+    If proposal passes, its status is changed in the network object.
     '''
     
     network = s['network']
