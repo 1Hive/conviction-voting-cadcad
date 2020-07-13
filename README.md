@@ -7,7 +7,7 @@ In the conviction voting model, a graph structure is used to record the interact
 
 ## Simulations
 
-[Initial model](Aragon Conviction Voting Model.ipynb)
+[Initial model](Aragon_Conviction_Voting_Model.ipynb)
 
 ## Background information & concepts addressed
 
