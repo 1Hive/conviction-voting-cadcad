@@ -20,7 +20,7 @@ cadCAD links:
 * https://github.com/BlockScience/cadCAD/tree/master/tutorials
 
 ### Reproducibility
-In order to reperform this code, we recommend the researcher use the following link to download https://www.anaconda.com/products/individual to download Python 3.7.To install the specific version of cadCAD this repository was built with, run the following code:
+In order to reperform this code, we recommend the researcher use the following link https://www.anaconda.com/products/individual to download Python 3.7. To install the specific version of cadCAD this repository was built with, run the following code:
 pip install cadCAD==0.4.17
 
 Then run cd Aragon_Conviction_Voting to enter the repository. Finally, run jupyter notebook to open a notebook server to run the various notebooks in this repository.
