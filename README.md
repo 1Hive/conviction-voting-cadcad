@@ -6,7 +6,7 @@
 ## Simulations
 
 * [Initial model](v1/Aragon_Conviction_Voting_Model.ipynb)
-* [Full complexity modell](v2/Aragon_Conviction_Voting_Model.ipynb)
+* [Full complexity model](v2/Aragon_Conviction_Voting_Model.ipynb)
 ## Background information & concepts addressed
 
 ### What is cadCAD?
