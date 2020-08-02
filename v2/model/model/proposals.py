@@ -76,11 +76,11 @@ def update_sentiment_on_release(params, step, sL, s, _input):
     proposals_accepted = np.sum([network.nodes[j]['funds_requested'] for j in accepted])
     
     sentiment = s['sentiment']
-    force = proposals_accepted/proposals_outstanding
-    if (force >=0) and (force <=1):
-        sentiment = get_sentimental(sentiment, force, False)
+    force = len(accepted)
+    if force>0:
+        sentiment = get_sentimental(sentiment, force, .25)
     else:
-        sentiment = get_sentimental(sentiment, 0, False)
+        sentiment = get_sentimental(sentiment, 0, 0)
     
     key = 'sentiment'
     value = sentiment

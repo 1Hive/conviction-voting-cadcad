@@ -95,7 +95,7 @@ def gen_new_participant(network, new_participant_holdings):
 
 
 
-def gen_new_proposal(network, funds, supply, scale_factor = 1.0/100):
+def gen_new_proposal(network, funds, supply, scale_factor = 1.0/1000):
     '''
     Definition:
     Driving processes for the arrival of proposals.
@@ -163,14 +163,16 @@ def get_nodes_by_type(g, node_type_selection):
     '''
     return [node for node in g.nodes if g.nodes[node]['type']== node_type_selection ]
 
-def get_sentimental(sentiment, force, decay=0):
+def get_sentimental(sentiment, force, decay=.1):
     '''
     '''
     mu = decay
-    sentiment = sentiment*(1-mu) + force
+    sentiment = sentiment*(1-mu) + force*mu
     
     if sentiment > 1:
         sentiment = 1
+    elif sentiment < 0:
+        sentiment = 0
         
     return sentiment
 
@@ -424,7 +426,7 @@ def quantile_plot(xkey, ykey, dataframe, dq=.1, logy=False, return_df = False):
     if return_df:
         return data
 
-def affinities_plot(df):
+def affinities_plot(df, dims = (8.5, 11) ):
     '''
     '''
     last_net= df.network.values[-1]
@@ -440,7 +442,6 @@ def affinities_plot(df):
             j = last_props[j_ind]
             affinities[i_ind][j_ind] = last_net.edges[(i,j)]['affinity']
 
-    dims = (20, 5)
     fig, ax = plt.subplots(figsize=dims)
 
     sns.heatmap(affinities.T,
@@ -448,6 +449,7 @@ def affinities_plot(df):
                 yticklabels=last_props,
                 square=True,
                 cbar=True,
+                cmap = plt.cm.RdYlGn,
                 ax=ax)
 
     plt.title('affinities between participants and proposals')
@@ -457,12 +459,14 @@ def affinities_plot(df):
 
 
 
-def trigger_sweep(field, trigger_func,beta,rho,alpha,xmax=.2):
+def trigger_sweep(field, trigger_func,beta,rho,alpha,supply=10**9):
     '''
     '''
+    xmax= beta
+
     if field == 'effective_supply':
         share_of_funds = np.arange(.001,xmax,.001)
-        total_supply = np.arange(0,10**9, 10**6) 
+        total_supply = np.arange(0,supply*10, supply/100) 
         demo_data_XY = np.outer(share_of_funds,total_supply)
 
         demo_data_Z0=np.empty(demo_data_XY.shape)
@@ -484,11 +488,12 @@ def trigger_sweep(field, trigger_func,beta,rho,alpha,xmax=.2):
                 'share_of_max_conv': demo_data_Z2,
                 'log10_share_of_max_conv':demo_data_Z3,
                 'total_supply':total_supply,
-                'share_of_funds':share_of_funds}
+                'share_of_funds':share_of_funds,
+                'alpha':alpha}
     elif field == 'alpha':
-        alpha = np.arange(0,1,.001)
+        #note if alpha >.01 then this will give weird results max alpha will be >1
+        alpha = np.arange(0,.5,.001)
         share_of_funds = np.arange(.001,xmax,.001)
-        total_supply = 10**9
         demo_data_XY = np.outer(share_of_funds,alpha)
 
         demo_data_Z4=np.empty(demo_data_XY.shape)
@@ -498,7 +503,7 @@ def trigger_sweep(field, trigger_func,beta,rho,alpha,xmax=.2):
         for sof_ind in range(len(share_of_funds)):
             sof = share_of_funds[sof_ind]
             for a_ind in range(len(alpha)):
-                ts = total_supply
+                ts = supply
                 a = alpha[a_ind]
                 tc = ts /(1-a)
                 trigger = trigger_func(sof, 1, ts, beta, rho, a)
@@ -512,7 +517,8 @@ def trigger_sweep(field, trigger_func,beta,rho,alpha,xmax=.2):
                'share_of_max_conv': demo_data_Z6,
                'log10_share_of_max_conv':demo_data_Z7,
                'alpha':alpha,
-               'share_of_funds':share_of_funds}
+               'share_of_funds':share_of_funds,
+               'supply':supply}
         
     else:
         return "invalid field"
@@ -535,53 +541,125 @@ def trigger_plotter(share_of_funds,Z, color_label,y, ylabel,cmap='jet'):
     
 def trigger_grid(supply_sweep, alpha_sweep):
 
-    fig, axs = plt.subplots(nrows=2, ncols=2,figsize=(20,20))
+    fig, axs = plt.subplots(nrows=2, ncols=1,figsize=(20,20))
     axs = axs.flatten()
 
-    share_of_funds = alpha_sweep['share_of_funds']
-    Z = alpha_sweep['log10_share_of_max_conv']
-    y = alpha_sweep['alpha']
-    ylabel = 'alpha'
+    # cut out the plots that didn't require the heatmap
+    # and switch to (2,1) subplots
 
-    axs[0].contourf(share_of_funds, y, Z.T,100, cmap='jet', )
-    #axs[0].colorbar(cf)
-    axs[0].axis([share_of_funds[0], share_of_funds[-1], y[0], y[-1]])
-    axs[0].set_ylabel(ylabel)
-    axs[0].set_xlabel('Share of Funds Requested')
-    axs[0].set_title('Trigger Function Map - Alpha sweep')
+    # share_of_funds = alpha_sweep['share_of_funds']
+    # Z = alpha_sweep['log10_share_of_max_conv']
+    # y = alpha_sweep['alpha']
+    # ylabel = 'alpha'
 
+    # axs[0].contourf(share_of_funds, y, Z.T,100, cmap='jet', )
+    # #axs[0].colorbar(cf)
+    # axs[0].axis([share_of_funds[0], share_of_funds[-1], y[0], y[-1]])
+    # axs[0].set_ylabel(ylabel)
+    # axs[0].set_xlabel('Share of Funds Requested')
+    # axs[0].set_title('Trigger Function Map - Alpha sweep')
 
     share_of_funds = alpha_sweep['share_of_funds']
     Z = alpha_sweep['log10_trigger']
     y = alpha_sweep['alpha']
     ylabel = 'alpha'
+    supply = alpha_sweep['supply']
 
-    axs[1].contourf(share_of_funds, y, Z.T,100, cmap='jet', )
-    axs[1].axis([share_of_funds[0], share_of_funds[-1], y[0], y[-1]])
-    axs[1].set_ylabel(ylabel)
-    axs[1].set_xlabel('Share of Funds Requested')
-    axs[1].set_title('Trigger Function Map - Alpha sweep - Z: log10_trigger')
+    cp0=axs[0].contourf(share_of_funds, y, Z.T,100, cmap='jet', )
+    axs[0].axis([share_of_funds[0], share_of_funds[-1], y[0], y[-1]])
+    axs[0].set_ylabel(ylabel)
+    axs[0].set_xlabel('Share of Funds Requested')
+    axs[0].set_title('Trigger Function Map - Alpha sweep; Supply ='+str(supply))
+    cb0=plt.colorbar(cp0, ax=axs[0])
+    cb0.set_label('log10 of conviction to trigger')
 
-    share_of_funds = supply_sweep['share_of_funds']
-    Z = supply_sweep['log10_share_of_max_conv']
-    y = supply_sweep['total_supply']
-    ylabel = 'Effective Supply'
+    # share_of_funds = supply_sweep['share_of_funds']
+    # Z = supply_sweep['log10_share_of_max_conv']
+    # y = supply_sweep['total_supply']
+    # ylabel = 'Effective Supply'
 
-    axs[2].contourf(share_of_funds, y, Z.T,100, cmap='jet', )
-    axs[2].axis([share_of_funds[0], share_of_funds[-1], y[0], y[-1]])
-    axs[2].set_ylabel(ylabel)
-    axs[2].set_xlabel('Share of Funds Requested')
-    axs[2].set_title('Trigger Function Map - Supply sweep - Z: share_of_max_conv')   
-    
+    # axs[2].contourf(share_of_funds, y, Z.T,100, cmap='jet', )
+    # axs[2].axis([share_of_funds[0], share_of_funds[-1], y[0], y[-1]])
+    # axs[2].set_ylabel(ylabel)
+    # axs[2].set_xlabel('Share of Funds Requested')
+    # axs[2].set_title('Trigger Function Map - Supply sweep - Z: share_of_max_conv')   
     
     share_of_funds = supply_sweep['share_of_funds']
     Z = supply_sweep['log10_trigger']
     y = supply_sweep['total_supply']
     ylabel = 'Effective Supply'
+    alpha = supply_sweep['alpha']
 
-    axs[3].contourf(share_of_funds, y, Z.T,100, cmap='jet', )
-    axs[3].axis([share_of_funds[0], share_of_funds[-1], y[0], y[-1]])
-    axs[3].set_ylabel(ylabel)
-    axs[3].set_xlabel('Share of Funds Requested')
-    axs[3].set_title('Trigger Function Map - Supply sweep')
+    max_conv = y/(1-alpha)
+
+    cp1=axs[1].contourf(share_of_funds, y, Z.T,100, cmap='jet', )
+    axs[1].axis([share_of_funds[0], share_of_funds[-1], y[0], y[-1]])
+    axs[1].set_ylabel(ylabel)
+    axs[1].set_xlabel('Share of Funds Requested')
+    axs[1].set_title('Trigger Function Map - Supply sweep; alpha='+str(alpha))
+    axs[1].set_label('log10 of conviction to trigger')
+    cb1=plt.colorbar(cp1, ax=axs[1])
+    cb1.set_label('log10 of conviction to trigger')
+
+
+def initialize_network(n,m, initial_funds, supply):
+    '''
+    Definition:
+    Function to initialize network x object
+
+    Parameters:
+
+    Assumptions:
+
+    Returns:
+
+    Example:
+    '''
+    # initilize network x graph
+    network = nx.DiGraph()
+    # create participant nodes with type and token holding
+    for i in range(n):
+        network.add_node(i)
+        network.nodes[i]['type']= "participant"
+        
+        h_rv = expon.rvs(loc=0.0, scale= supply/n)
+        network.nodes[i]['holdings'] = h_rv # SOL check
+        
+        s_rv = np.random.rand() 
+        network.nodes[i]['sentiment'] = s_rv
     
+    participants = get_nodes_by_type(network, 'participant')
+    initial_supply = np.sum([ network.nodes[i]['holdings'] for i in participants])
+       
+    
+    # Generate initial proposals
+    for ind in range(m):
+        j = n+ind
+        network.add_node(j)
+        network.nodes[j]['type']="proposal"
+        network.nodes[j]['conviction'] = 0
+        network.nodes[j]['status'] = 'candidate'
+        network.nodes[j]['age'] = 0
+        
+        r_rv = gamma.rvs(3,loc=0.001, scale=100)
+        network.nodes[j]['funds_requested'] = r_rv
+        
+        network.nodes[j]['trigger']= trigger_threshold(r_rv, initial_funds, initial_supply,beta,rho,alpha)
+        
+        for i in range(n):
+            network.add_edge(i, j)
+            
+            rv = np.random.rand()
+            a_rv = np.random.uniform(-1,1,1)[0]
+            network.edges[(i, j)]['affinity'] = a_rv
+            network.edges[(i, j)]['tokens'] = 0
+            network.edges[(i, j)]['conviction'] = 0
+            network.edges[(i, j)]['type'] = 'support'
+            
+        proposals = get_nodes_by_type(network, 'proposal')
+        total_requested = np.sum([ network.nodes[i]['funds_requested'] for i in proposals])
+        
+        network = initial_conflict_network(network, rate = .25)
+        network = initial_social_network(network, scale = 1)
+        
+    return network

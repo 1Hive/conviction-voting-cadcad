@@ -16,11 +16,21 @@ def driving_process(params, step, sL, s):
     arrival_rate = 10/(1+s['sentiment'])
     rv1 = np.random.rand()
     new_participant = bool(rv1<1/arrival_rate)
-    supporters = get_edges_by_type(s['network'], 'support')
+
+    network = s['network']
     
-    len_parts = len(get_nodes_by_type(s['network'], 'participant'))
+    proposals = get_nodes_by_type(network, 'proposal')
+    participants = get_nodes_by_type(network, 'participant')
+
+    cadidate_proposals = [j for j in proposals if network.nodes[j]['status']=='candidate']
+    subgraph_nodes = cadidate_proposals+participants
+
+    candidate_subgraph = s['network'].subgraph(subgraph_nodes)
+    supporters = get_edges_by_type(candidate_subgraph, 'support')
+    
+    len_parts = len(participants)
     #supply = s['supply'] 
-    expected_holdings = .1*supply/len_parts
+    expected_holdings = .01*supply/len_parts
     if new_participant:
         h_rv = expon.rvs(loc=0.0, scale=expected_holdings)
         new_participant_holdings = h_rv
@@ -28,16 +38,15 @@ def driving_process(params, step, sL, s):
         new_participant_holdings = 0
     
     network = s['network']
-    affinities = [network.edges[e]['affinity'] for e in supporters ]
+    affinities = [network.edges[e]['affinity'] for e in supporters]
     median_affinity = np.median(affinities)
     
-    proposals = get_nodes_by_type(network, 'proposal')
-    fund_requests = [network.nodes[j]['funds_requested'] for j in proposals if network.nodes[j]['status']=='candidate']
+    fund_requests = [network.nodes[j]['funds_requested'] for j in cadidate_proposals]
     
     funds = s['funds']
     total_funds_requested = np.sum(fund_requests)
     
-    proposal_rate = 1/median_affinity * (1+total_funds_requested/funds)
+    proposal_rate = 1/(1+median_affinity) * (1+total_funds_requested/funds)
     rv2 = np.random.rand()
     new_proposal = bool(rv2<1/proposal_rate)
     

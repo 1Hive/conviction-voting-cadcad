@@ -76,27 +76,19 @@ def complete_proposal(params, step, sL, s, _input):
     return (key, value)
 
 def update_sentiment_on_completion(params, step, sL, s, _input):
+    
     network = s['network']
-    proposals = get_nodes_by_type(network, 'proposal')
     completed = _input['completed']
-    failed = _input['failed']
-    
-    grants_outstanding = np.sum([network.nodes[j]['funds_requested'] for j in proposals if network.nodes[j]['status']=='active'])
-    
-    grants_completed = np.sum([network.nodes[j]['funds_requested'] for j in completed])
-    grants_failed = np.sum([network.nodes[j]['funds_requested'] for j in failed])
-    
+    failed  = _input['failed']
     sentiment = s['sentiment']
     
-    if grants_outstanding>0:
-        force = (grants_completed-grants_failed)/grants_outstanding
-    else:
-        force=1
-    if (force >=0) and (force <=1):
-        sentiment = get_sentimental(sentiment, force, mu)
-    else:
-        sentiment = get_sentimental(sentiment, 0, mu)
+    completed_count = len(completed)
+    failed_count = len(failed) 
     
+    if completed_count+failed_count>0:
+        sentiment = get_sentimental(sentiment,completed_count-failed_count, .25)
+    else:
+        sentiment = get_sentimental(sentiment, 0, 0)
     
     key = 'sentiment'
     value = sentiment
@@ -134,8 +126,10 @@ def participants_decisions(params, step, sL, s):
                 booster = social_affinity_booster(network, j, i)
                 affinity = network.edges[(i, j)]['affinity']+booster
                 cutoff = sensitivity*np.max([network.edges[(i,p)]['affinity'] for p in candidates])
-                if cutoff <.5:
-                    cutoff = .5
+                # range is [-1,1], where 0 is indifference, this determines min affinity supported
+                # if no proposal meets this threshold participants may support a null proposal
+                if cutoff <.3:
+                    cutoff = .3
                 
                 if affinity > cutoff:
                     support.append(j)
