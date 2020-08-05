@@ -11,7 +11,7 @@ beta = .2 #later we should set this to be param so we can sweep it
 # tuning param for the trigger function
 rho = .0025
 #alpha = 1 - 0.9999599 #native timescale for app as in contract code
-alpha = 1/2**3 #timescale set in days with 3 day halflife (from comments in contract comments)
+alpha = 1-1/2**3 #timescale set in days with 3 day halflife (from comments in contract comments)
 supply = 21706 # Honey supply balance as of 7-17-2020  
 initial_sentiment = .6
 
