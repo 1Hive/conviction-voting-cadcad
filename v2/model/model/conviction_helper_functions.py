@@ -6,10 +6,10 @@ import matplotlib.colors as colors
 import matplotlib.cm as cmx
 import seaborn as sns
 
-beta = .2 #later we should set this to be param so we can sweep it
+#beta = .2 #later we should set this to be param so we can sweep it
 # tuning param for the trigger function
-rho = .001
-alpha = 1 - 0.9999599
+#rho = .001
+#alpha = 1 - 0.9999599
 
 
 def trigger_threshold(requested, funds, supply, beta, rho, alpha):
@@ -95,7 +95,7 @@ def gen_new_participant(network, new_participant_holdings):
 
 
 
-def gen_new_proposal(network, funds, supply, scale_factor = 1.0/1000):
+def gen_new_proposal(network, funds, supply, beta, rho, alpha, funds_requested):
     '''
     Definition:
     Driving processes for the arrival of proposals.
@@ -119,11 +119,11 @@ def gen_new_proposal(network, funds, supply, scale_factor = 1.0/1000):
     network.nodes[j]['status']='candidate'
     network.nodes[j]['age']=0
     
-    rescale = funds*scale_factor
-    r_rv = gamma.rvs(1.5,loc=0.001, scale=rescale)
-    network.nodes[j]['funds_requested'] = r_rv
+    # rescale = funds*scale_factor
+    # r_rv = gamma.rvs(1.5,loc=0.001, scale=rescale)
+    network.nodes[j]['funds_requested'] =funds_requested
     
-    network.nodes[j]['trigger']= trigger_threshold(r_rv, funds, supply, beta, rho, alpha)
+    network.nodes[j]['trigger']= trigger_threshold(funds_requested, funds, supply, beta, rho, alpha)
     
     participants = get_nodes_by_type(network, 'participant')
     proposing_participant = np.random.choice(participants)
@@ -602,7 +602,7 @@ def trigger_grid(supply_sweep, alpha_sweep):
     cb1.set_label('log10 of conviction to trigger')
 
 
-def initialize_network(n,m, initial_funds, supply):
+def initialize_network(n,m, initial_funds, supply, beta, rho, alpha):
     '''
     Definition:
     Function to initialize network x object
@@ -641,7 +641,7 @@ def initialize_network(n,m, initial_funds, supply):
         network.nodes[j]['status'] = 'candidate'
         network.nodes[j]['age'] = 0
         
-        r_rv = gamma.rvs(3,loc=0.001, scale=100)
+        r_rv = gamma.rvs(3,loc=0.001, scale=500)
         network.nodes[j]['funds_requested'] = r_rv
         
         network.nodes[j]['trigger']= trigger_threshold(r_rv, initial_funds, initial_supply,beta,rho,alpha)

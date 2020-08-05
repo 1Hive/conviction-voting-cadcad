@@ -23,13 +23,18 @@ def run(input_config=configs):
     df = pd.DataFrame(raw_system_events)
     return df
 
-def postprocessing(df):
+def postprocessing(df, sim_ind=-1):
     '''
     Function for postprocessing the simulation results to extract key information from the network object. 
     '''
     # subset to last substep of each simulation
     df= df[df.substep==df.substep.max()]
-    df=df[df.simulation==df.simulation.max()]
+
+    sim_count = df.simulation.max()
+    if sim_ind <0:
+        sim_ind = sim_count+1+sim_ind
+
+    df=df[df.simulation==sim_ind]
 
     # Extract information from dataframe
     df['conviction'] = df.network.apply(lambda g: np.array([g.nodes[j]['conviction'] for j in get_nodes_by_type(g, 'proposal') if g.nodes[j]['status']=='candidate']))
