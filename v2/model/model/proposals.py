@@ -10,7 +10,7 @@ def trigger_function(params, step, sL, s):
     '''
     network = s['network']
     funds = s['funds']
-    #supply = s['supply']
+    supply = s['supply']
     proposals = get_nodes_by_type(network, 'proposal')
     
     accepted = []

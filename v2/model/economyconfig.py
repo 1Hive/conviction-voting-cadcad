@@ -13,7 +13,7 @@ from .partial_state_update_block import partial_state_update_blocks
 
 sim_config = config_sim({
     'N': 1,
-    'T': range(183), #day 
+    'T': range(60), #day 
 })
 
 seeds = {
