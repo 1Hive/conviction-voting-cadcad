@@ -29,7 +29,10 @@ def driving_process(params, step, sL, s):
     supporters = get_edges_by_type(candidate_subgraph, 'support')
     
     len_parts = len(participants)
-    supply = s['supply'] 
+    supply = s['effective_supply'] 
+    
+    funds_arrival = supply * 0.0001
+
     expected_holdings = .01*supply/len_parts
     if new_participant:
         h_rv = expon.rvs(loc=0.0, scale=expected_holdings)
@@ -87,7 +90,7 @@ def update_network(params, step, sL, s, _input):
 
     network = s['network']
     funds = s['funds']
-    supply = s['supply']
+    supply = s['effective_supply']
 
     new_participant = _input['new_participant'] 
     new_proposal = _input['new_proposal']
@@ -129,5 +132,32 @@ def increment_funds(params, step, sL, s, _input):
     
     key = 'funds'
     value = funds
+    
+    return (key, value)
+
+def increment_supply(params, step, sL, s, _input):
+    '''
+    Increase funds by the amount of the new particpant's funds.
+    '''
+    supply = s['effective_supply']
+    funds_arrival = _input['funds_arrival']
+
+    #increment funds
+    supply = supply + funds_arrival   #/2     * 0.0001
+    
+    key = 'supply'
+    value = supply
+    
+    return (key, value)
+
+def fund_arrival_check(params, step, sL, s, _input):
+    '''
+    Increase funds by the amount of the new particpant's funds.
+    '''
+    
+    funds_arrival = _input['funds_arrival']
+    
+    key = 'funds_arrival'
+    value = funds_arrival
     
     return (key, value)

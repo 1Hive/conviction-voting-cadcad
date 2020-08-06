@@ -7,6 +7,7 @@ genesis_states = {
                                             initial_values['supply']),
                 'funds':initial_values['initial_funds'],
                 'sentiment': initial_values['initial_sentiment'],
-                'supply': initial_values['supply']
+                'effective_supply': initial_values['supply'],
+                'funds_arrival': 0
 
 }

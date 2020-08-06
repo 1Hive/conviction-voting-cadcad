@@ -12,6 +12,8 @@ partial_state_update_blocks = [
         'variables': {
             'network': update_network,
             'funds':increment_funds,
+            'effective_supply': increment_supply,
+            'funds_arrival' : fund_arrival_check,
         }
     },
     {
