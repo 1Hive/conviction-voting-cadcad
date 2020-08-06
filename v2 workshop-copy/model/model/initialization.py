@@ -27,6 +27,6 @@ min_supp = 1 #number of tokens that must be stake for a proposal to be a candida
 base_completion_rate = 45
 base_failure_rate = 180 
 
-initial_funds = 48000 # in xDai
+initial_funds = 2000 #48000 # in xDai
 
 network = initialize_network(n,m,initial_funds,supply, beta, rho, alpha)

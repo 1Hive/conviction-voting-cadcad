@@ -5,6 +5,7 @@ genesis_states = {
                 'network':network,
                 'funds':initial_funds,
                 'sentiment': initial_sentiment,
-                'supply':supply
+                'supply':supply,
+                'funds_arrival': 0
 
 }

@@ -18,7 +18,7 @@ def driving_process(params, step, sL, s):
     #new funds (added to communal funds)
     #new participants (and personal funds)
     #new Proposals
-
+    
     ### helpful data collection from the state
     funds = s['funds']
     network = s['network']
@@ -26,19 +26,76 @@ def driving_process(params, step, sL, s):
     proposals = get_nodes_by_type(network, 'proposal')
     participants = get_nodes_by_type(network, 'participant')
     candidate_proposals = [j for j in proposals if network.nodes[j]['status']=='candidate']
-    
+    supply = s['supply']
     #### Part 1:
     # Arrival of New Funds
+    # Funds coming in minting
+    # kappa = 2
 
+    funds_arrival = supply * 0.0001
+
+    
     #### Part 2:
     # Arrival of a new participant?
     # how much holdings do they have?
+
+    arrival_rate = 10/(1+s['sentiment'])
+    rv1 = np.random.rand()
+    new_participant = bool(rv1<1/arrival_rate)
+
+    network = s['network']
+    
+    proposals = get_nodes_by_type(network, 'proposal')
+    participants = get_nodes_by_type(network, 'participant')
+
+    candidate_proposals = [j for j in proposals if network.nodes[j]['status']=='candidate']
+    subgraph_nodes = candidate_proposals+participants
+
+    candidate_subgraph = s['network'].subgraph(subgraph_nodes)
+    supporters = get_edges_by_type(candidate_subgraph, 'support')
+    
+    len_parts = len(participants)
+    #supply = s['supply'] 
+    expected_holdings = .01*supply/len_parts
+    if new_participant:
+        h_rv = expon.rvs(loc=0.0, scale=expected_holdings)
+        new_participant_holdings = h_rv
+    else:
+        new_participant_holdings = 0
+    
+    network = s['network']
+    affinities = [network.edges[e]['affinity'] for e in supporters if e[1] in candidate_proposals]
+    median_affinity = np.median(affinities)
+    
+    fund_requests = [network.nodes[j]['funds_requested'] for j in candidate_proposals]
+    
+    funds = s['funds']
+    total_funds_requested = np.sum(fund_requests)
+    
+    if total_funds_requested == 0:
+        new_proposal = True
+        new_proposal_ct = 3
+    else:
+        proposal_rate = 1/(1-median_affinity) * total_funds_requested/funds
+        rv2 = np.random.rand()
+        new_proposal = bool(rv2<1/proposal_rate)
+        new_proposal_ct = int(1-median_affinity)+1
+
+    expected_request = beta*s['funds']/10
+    new_proposal_requested = [expon.rvs(loc=expected_request/10, scale=expected_request) for ct in range(new_proposal_ct)]
 
     #### Part 3:
     # Arrival of new proposals?
     # How many?
     # how much funds are they requesting?
-
+    # random_new_proposal = np.random.randint(0,100)
+    # if random_new_proposal > 90:
+    #     new_proposal = True
+    #     new_participant_holdings = funds * 0.01
+    #     new_proposal_requested = 
+    # else:
+    #     new_proposal = False
+    #     new_participant_holdings = 0
 
     return({'new_participant':new_participant, #True/False
             'new_participant_holdings':new_participant_holdings, #funds held by new participant if True
@@ -98,5 +155,34 @@ def increment_funds(params, step, sL, s, _input):
     
     key = 'funds'
     value = funds
+    
+    return (key, value)
+
+def increment_supply(params, step, sL, s, _input):
+    '''
+    Increase funds by the amount of the new particpant's funds.
+    '''
+    supply = s['supply']
+    funds_arrival = _input['funds_arrival']
+
+    #increment funds
+    supply = supply + funds_arrival   #/2     * 0.0001
+    
+    key = 'supply'
+    value = supply
+    
+    return (key, value)
+
+def fund_arrival_check(params, step, sL, s, _input):
+    '''
+    Increase funds by the amount of the new particpant's funds.
+    '''
+    
+    funds_arrival = _input['funds_arrival']
+
+
+    
+    key = 'funds_arrival'
+    value = funds_arrival
     
     return (key, value)
