@@ -22,9 +22,9 @@ def check_progress(params, step, sL, s):
     for j in proposals:
         if network.nodes[j]['status'] == 'active':
             grant_size = network.nodes[j]['funds_requested']
-            likelihood = 1.0/(sys_params['base_completion_rate']+np.log(grant_size))
+            likelihood = 1.0/(params['base_completion_rate']+np.log(grant_size))
             
-            failure_rate = 1.0/(sys_params['base_failure_rate']+np.log(grant_size))
+            failure_rate = 1.0/(params['base_failure_rate']+np.log(grant_size))
             if np.random.rand() < likelihood:
                 completed.append(j)
             elif np.random.rand() < failure_rate:
@@ -109,27 +109,23 @@ def participants_decisions(params, step, sL, s):
     proposals = get_nodes_by_type(network, 'proposal')
     candidates = [j for j in proposals if network.nodes[j]['status']=='candidate']
     
-    gain = .01
-    delta_holdings={}
+    delta_holdings = {}
     proposals_supported ={}
     for i in participants:
-        engagement_rate = .03*network.nodes[i]['sentiment']
+        engagement_rate = params['base_engagement_rate']*network.nodes[i]['sentiment']
 
-        #engagement_rate = .3*network.nodes[i]['sentiment']
         if np.random.rand()<engagement_rate:
         
-            force = network.nodes[i]['sentiment']-sys_params['sensitivity']
-            delta_holdings[i] = network.nodes[i]['holdings']*gain*force
-            
+            delta_holdings[i] = 0
             support = []
             for j in candidates:
                 booster = social_affinity_booster(network, j, i)
                 affinity = network.edges[(i, j)]['affinity']+booster
-                cutoff = sys_params['sensitivity']*np.max([network.edges[(i,p)]['affinity'] for p in candidates])
+                cutoff = params['sensitivity']*np.max([network.edges[(i,p)]['affinity'] for p in candidates])
                 # range is [-1,1], where 0 is indifference, this determines min affinity supported
                 # if no proposal meets this threshold participants may support a null proposal
-                if cutoff <.3:
-                    cutoff = .3
+                if cutoff < params['lowest_affinity_to_support']:
+                    cutoff = params['lowest_affinity_to_support']
                 
                 if affinity > cutoff:
                     support.append(j)
@@ -139,7 +135,7 @@ def participants_decisions(params, step, sL, s):
             delta_holdings[i] = 0
             proposals_supported[i] = [j for j in candidates if network.edges[(i,j)]['tokens']>0 ]
     
-    return({'delta_holdings':delta_holdings, 'proposals_supported':proposals_supported})
+    return({'delta_holdings':delta_holdings,'proposals_supported':proposals_supported})
 
 # Mechanisms
 def update_tokens(params, step, sL, s, _input):
@@ -156,7 +152,7 @@ def update_tokens(params, step, sL, s, _input):
     participants = get_nodes_by_type(network, 'participant')
     
     for i in participants:
-        network.nodes[i]['holdings'] = network.nodes[i]['holdings']+delta_holdings[i]
+        network.nodes[i]['holdings'] = network.nodes[i]['holdings'] + delta_holdings[i]
         supported = proposals_supported[i]
         total_affinity = np.sum([ network.edges[(i, j)]['affinity'] for j in supported])
         for j in candidates:
@@ -168,12 +164,12 @@ def update_tokens(params, step, sL, s, _input):
             
             prior_conviction = network.edges[(i, j)]['conviction']
             current_tokens = network.edges[(i, j)]['tokens']
-            network.edges[(i, j)]['conviction'] =current_tokens+sys_params['alpha']*prior_conviction
+            network.edges[(i, j)]['conviction'] =current_tokens+params['alpha']*prior_conviction
     
     for j in candidates:
         network.nodes[j]['conviction'] = np.sum([ network.edges[(i, j)]['conviction'] for i in participants])
         total_tokens = np.sum([network.edges[(i, j)]['tokens'] for i in participants ])
-        if total_tokens < sys_params['min_supp']:
+        if total_tokens < params['min_supp']:
             network.nodes[j]['status'] = 'killed'
     
     key = 'network'

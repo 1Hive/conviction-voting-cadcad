@@ -11,9 +11,17 @@ partial_state_update_blocks = [
         },
         'variables': {
             'network': update_network,
-            'funds':increment_funds,
             'effective_supply': increment_supply,
-            'funds_arrival' : fund_arrival_check,
+        }
+     },
+     {
+        'policies': { 
+            'random': minting_rule
+        },
+        'variables': {
+            'total_supply': mint_to_supply,
+            'funds':mint_to_funds,
+
         }
     },
     {

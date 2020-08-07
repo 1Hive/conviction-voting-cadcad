@@ -4,7 +4,6 @@ import pandas as pd
 from .conviction_helper_functions import * 
 import networkx as nx
 from scipy.stats import expon, gamma
-from .sys_params import *
 
 
 
@@ -31,8 +30,6 @@ def driving_process(params, step, sL, s):
     len_parts = len(participants)
     supply = s['effective_supply'] 
     
-    funds_arrival = supply * 0.0001
-
     expected_holdings = .01*supply/len_parts
     if new_participant:
         h_rv = expon.rvs(loc=0.0, scale=expected_holdings)
@@ -58,7 +55,7 @@ def driving_process(params, step, sL, s):
         new_proposal = bool(rv2<1/proposal_rate)
         new_proposal_ct = int(1-median_affinity)+1
 
-    expected_request = sys_params['beta']*s['funds']/10
+    expected_request = params['beta']*s['funds']/10
     new_proposal_requested = [expon.rvs(loc=expected_request/10, scale=expected_request) for ct in range(new_proposal_ct)]
         
     sentiment = s['sentiment']
@@ -69,18 +66,18 @@ def driving_process(params, step, sL, s):
         scale_factor = 1
     
     #this shouldn't happen but expon is throwing domain errors
-    if sentiment>.4: 
-        funds_arrival = expon.rvs(loc = 0, scale = scale_factor)
-    else:
-        funds_arrival = 0
+    # if sentiment>.4: 
+    #     funds_arrival = expon.rvs(loc = 0, scale = scale_factor)
+    # else:
+    #     funds_arrival = 0
     
     return({'new_participant':new_participant, #True/False
             'new_participant_holdings':new_participant_holdings, #funds held by new participant if True
             'new_proposal':new_proposal, #True/False
             'new_proposal_ct': new_proposal_ct, #int
             'new_proposal_requested':new_proposal_requested, #list funds requested by new proposal if True, len =ct
-            'funds_arrival':funds_arrival}) #quantity of new funds arriving to the communal pool
-
+            # 'funds_arrival':funds_arrival #quantity of new funds arriving to the communal pool (donations or revenue)
+            })
     
 # Mechanisms 
 def update_network(params, step, sL, s, _input):
@@ -102,7 +99,7 @@ def update_network(params, step, sL, s, _input):
     if new_proposal:
         for ct in range(_input['new_proposal_ct']):
             funds_req = _input['new_proposal_requested'][ct]
-            network= gen_new_proposal(network,funds,supply, funds_req)
+            network= gen_new_proposal(network,funds,supply, funds_req,params)
     
     #update age of the existing proposals
     proposals = get_nodes_by_type(network, 'proposal')
@@ -111,7 +108,7 @@ def update_network(params, step, sL, s, _input):
         network.nodes[j]['age'] =  network.nodes[j]['age']+1
         if network.nodes[j]['status'] == 'candidate':
             requested = network.nodes[j]['funds_requested']
-            network.nodes[j]['trigger'] = trigger_threshold(requested, funds, supply, sys_params['alpha'])
+            network.nodes[j]['trigger'] = trigger_threshold(requested, funds, supply, params['alpha'],params)
         else:
             network.nodes[j]['trigger'] = np.nan
             
@@ -120,44 +117,47 @@ def update_network(params, step, sL, s, _input):
     
     return (key, value)
 
-def increment_funds(params, step, sL, s, _input):
-    '''
-    Increase funds by the amount of the new particpant's funds.
-    '''
-    funds = s['funds']
-    funds_arrival = _input['funds_arrival']
-
-    #increment funds
-    funds = funds + funds_arrival
-    
-    key = 'funds'
-    value = funds
-    
-    return (key, value)
 
 def increment_supply(params, step, sL, s, _input):
     '''
-    Increase funds by the amount of the new particpant's funds.
+    Increase supply by the amount of the new particpant's funds.
     '''
     supply = s['effective_supply']
-    funds_arrival = _input['funds_arrival']
 
-    #increment funds
-    supply = supply + funds_arrival   #/2     * 0.0001
+    if _input['new_participant_holdings']:
+        supply = supply + _input['new_participant_holdings']
     
-    key = 'supply'
+    key = 'effective_supply'
     value = supply
     
     return (key, value)
 
-def fund_arrival_check(params, step, sL, s, _input):
+# Behaviors
+# Substep 2
+def minting_rule(params, step, sL, s):
+    supply = s['total_supply']
+    tokens_to_mint = params['gamma'] * supply
+    return ({'mint':tokens_to_mint})
+
+# Mechanisms 
+def mint_to_supply(params, step, sL, s, _input):
     '''
-    Increase funds by the amount of the new particpant's funds.
     '''
+    mint = _input['mint']
+    supply = s['total_supply']
+
+    key = 'total_supply'
+    value = supply + mint
     
-    funds_arrival = _input['funds_arrival']
-    
-    key = 'funds_arrival'
-    value = funds_arrival
+    return (key, value)
+
+def mint_to_funds(params, step, sL, s, _input):
+    '''
+    '''
+    mint = _input['mint']
+    funds = s['funds']
+
+    key = 'funds'
+    value = funds + mint
     
     return (key, value)

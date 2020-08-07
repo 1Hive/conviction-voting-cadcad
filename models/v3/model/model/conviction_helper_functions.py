@@ -5,17 +5,17 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.cm as cmx
 import seaborn as sns
-from .sys_params import *
 
 
 
-def trigger_threshold(requested, funds, supply, alpha):
+def trigger_threshold(requested, funds, supply, alpha, params):
     '''
     Function that determines threshold for proposals being accepted. 
     '''
+
     share = requested/funds
-    if share < sys_params['beta']:
-        threshold = sys_params['rho']*supply/(sys_params['beta']-share)**2  * 1/(1-alpha)
+    if share < params['beta']:
+        threshold = params['rho']*supply/(params['beta']-share)**2  * 1/(1-alpha)
         return threshold 
     else: 
         return np.inf
@@ -83,7 +83,7 @@ def gen_new_participant(network, new_participant_holdings):
         
         a_rv = a_rv = np.random.uniform(-1,1,1)[0]
         network.edges[(i, j)]['affinity'] = a_rv
-        network.edges[(i,j)]['tokens'] = a_rv*network.nodes[i]['holdings']
+        network.edges[(i,j)]['tokens'] = 0
         network.edges[(i, j)]['conviction'] = 0
         network.edges[(i,j)]['type'] = 'support'
     
@@ -92,7 +92,7 @@ def gen_new_participant(network, new_participant_holdings):
 
 
 
-def gen_new_proposal(network, funds, supply, funds_requested):
+def gen_new_proposal(network, funds, supply, funds_requested,params):
     '''
     Definition:
     Driving processes for the arrival of proposals.
@@ -118,7 +118,7 @@ def gen_new_proposal(network, funds, supply, funds_requested):
     
     network.nodes[j]['funds_requested'] =funds_requested
     
-    network.nodes[j]['trigger']= trigger_threshold(funds_requested, funds, supply,sys_params['alpha'])
+    network.nodes[j]['trigger']= trigger_threshold(funds_requested, funds, supply, params['alpha'],params)
     
     participants = get_nodes_by_type(network, 'participant')
     proposing_participant = np.random.choice(participants)
@@ -424,10 +424,10 @@ def affinities_plot(df, dims = (8.5, 11) ):
 
 
 
-def trigger_sweep(field, trigger_func,supply=10**9):
+def trigger_sweep(field, trigger_func,params,supply=10**9):
     '''
     '''
-    xmax= sys_params['beta']
+    xmax= params['beta']
 
     if field == 'effective_supply':
         share_of_funds = np.arange(.001,xmax,.001)
@@ -442,8 +442,8 @@ def trigger_sweep(field, trigger_func,supply=10**9):
             sof = share_of_funds[sof_ind]
             for ts_ind in range(len(total_supply)):
                 ts = total_supply[ts_ind]
-                tc = ts /(1-sys_params['alpha'])
-                trigger = trigger_func(sof, 1, ts,sys_params['alpha']) 
+                tc = ts /(1-params['alpha'])
+                trigger = trigger_func(sof, 1, ts, params['alpha'],params) 
                 demo_data_Z0[sof_ind,ts_ind] = np.log10(trigger)
                 demo_data_Z1[sof_ind,ts_ind] = trigger
                 demo_data_Z2[sof_ind,ts_ind] = trigger/tc #share of maximum possible conviction
@@ -454,7 +454,7 @@ def trigger_sweep(field, trigger_func,supply=10**9):
                 'log10_share_of_max_conv':demo_data_Z3,
                 'total_supply':total_supply,
                 'share_of_funds':share_of_funds,
-                'alpha':sys_params['alpha']}
+                'alpha':params['alpha']}
     elif field == 'alpha':
         #note if alpha >.01 then this will give weird results max alpha will be >1
         alpha = np.arange(0,.5,.001)
@@ -471,7 +471,7 @@ def trigger_sweep(field, trigger_func,supply=10**9):
                 ts = supply
                 a = alpha[a_ind]
                 tc = ts /(1-a)
-                trigger = trigger_func(sof, 1, ts, a)
+                trigger = trigger_func(sof, 1, ts, a, params)
                 demo_data_Z4[sof_ind,a_ind] = np.log10(trigger)
                 demo_data_Z5[sof_ind,a_ind] = trigger
                 demo_data_Z6[sof_ind,a_ind] = trigger/tc #share of maximum possible conviction
@@ -542,7 +542,7 @@ def trigger_grid(supply_sweep, alpha_sweep):
     cb1.set_label('log10 of conviction to trigger')
 
 
-def initialize_network(n,m, initial_funds, supply):
+def initialize_network(n,m, initial_funds, supply, params):
     '''
     Definition:
     Function to initialize network x object
@@ -584,7 +584,7 @@ def initialize_network(n,m, initial_funds, supply):
         r_rv = gamma.rvs(3,loc=0.001, scale=500)
         network.nodes[j]['funds_requested'] = r_rv
         
-        network.nodes[j]['trigger']= trigger_threshold(r_rv, initial_funds, initial_supply,sys_params['alpha'])
+        network.nodes[j]['trigger']= trigger_threshold(r_rv, initial_funds, initial_supply, params['alpha'],params)
         
         for i in range(n):
             network.add_edge(i, j)

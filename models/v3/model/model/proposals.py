@@ -1,7 +1,6 @@
 import numpy as np
 from .conviction_helper_functions import * 
 import networkx as nx
-from .sys_params import * 
 
 
 # Behaviors
@@ -21,8 +20,8 @@ def trigger_function(params, step, sL, s):
         if network.nodes[j]['status'] == 'candidate':
             requested = network.nodes[j]['funds_requested']
             age = network.nodes[j]['age']
-            threshold = trigger_threshold(requested, funds, supply, sys_params['alpha'])
-            if age > sys_params['tmin']:
+            threshold = trigger_threshold(requested, funds, supply, params['alpha'],params)
+            if age > params['tmin']:
                 conviction = network.nodes[j]['conviction']
                 if conviction >threshold:
                     accepted.append(j)
@@ -118,7 +117,7 @@ def update_proposals(params, step, sL, s, _input):
             affinities = [network.edges[(i,p)]['affinity'] for p in proposals if not(p in accepted)]
             if len(affinities)>1:
                 max_affinity = np.max(affinities)
-                force = network.edges[(i,j)]['affinity']-sys_params['sensitivity']*max_affinity
+                force = network.edges[(i,j)]['affinity']-params['sensitivity']*max_affinity
             else:
                 force = 0
             
