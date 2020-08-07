@@ -28,12 +28,10 @@ def driving_process(params, step, sL, s):
     candidate_subgraph = s['network'].subgraph(subgraph_nodes)
     supporters = get_edges_by_type(candidate_subgraph, 'support')
     
-    len_parts = len(participants)
-    supply = s['effective_supply'] 
-    
-    funds_arrival = supply * 0.0001
+    #len_parts = len(participants)
+    available_supply = s['total_supply']-s['effective_supply']
 
-    expected_holdings = .01*supply/len_parts
+    expected_holdings = .01*available_supply
     if new_participant:
         h_rv = expon.rvs(loc=0.0, scale=expected_holdings)
         new_participant_holdings = h_rv
@@ -65,23 +63,49 @@ def driving_process(params, step, sL, s):
     funds = s['funds']
     scale_factor = funds*sentiment**2/10000
     
-    if scale_factor <1:
-        scale_factor = 1
+    # if scale_factor <1:
+    #     scale_factor = 1
     
     #this shouldn't happen but expon is throwing domain errors
-    if sentiment>.4: 
-        funds_arrival = expon.rvs(loc = 0, scale = scale_factor)
-    else:
-        funds_arrival = 0
+    # if sentiment>.4: 
+    #     funds_arrival = expon.rvs(loc = 0, scale = scale_factor)
+    # else:
+    #     funds_arrival = 0
     
     return({'new_participant':new_participant, #True/False
             'new_participant_holdings':new_participant_holdings, #funds held by new participant if True
             'new_proposal':new_proposal, #True/False
             'new_proposal_ct': new_proposal_ct, #int
             'new_proposal_requested':new_proposal_requested, #list funds requested by new proposal if True, len =ct
-            'funds_arrival':funds_arrival}) #quantity of new funds arriving to the communal pool
+#            'funds_arrival':funds_arrival
+            }) #quantity of new funds arriving to the communal pool (donations or revenue)
 
+
+# minting policy (behavior)
+def minting_rule(params, step, sL, s):
+    supply = s['total_supply']
+    gamma = _params['gamma'] # order 0.001 or smaller: expansion of supply per day  
+    tokens_to_mint = gamma*supply
+
+    return({'mint':tokens_to_mint})
+
+# minting policy (mechanisms)
+def mint_to_supply(params, step, sL, s, _input):
+    mint = _input['mint']
+    supply = s['total_supply']
+    key = 'total_supply'
+    value = supply+mint
     
+    return (key, value)
+
+def mint_to_funds(params, step, sL, s, _input):
+    mint = _input['mint']
+    funds= s['funds']
+    key = 'funds'
+    value = funds+mint
+
+    return (key, value)
+
 # Mechanisms 
 def update_network(params, step, sL, s, _input):
     '''
@@ -122,7 +146,7 @@ def update_network(params, step, sL, s, _input):
 
 def increment_funds(params, step, sL, s, _input):
     '''
-    Increase funds by the amount of the new particpant's funds.
+    Increase funds by the amount of the new new donations
     '''
     funds = s['funds']
     funds_arrival = _input['funds_arrival']
@@ -140,12 +164,11 @@ def increment_supply(params, step, sL, s, _input):
     Increase funds by the amount of the new particpant's funds.
     '''
     supply = s['effective_supply']
-    funds_arrival = _input['funds_arrival']
 
-    #increment funds
-    supply = supply + funds_arrival   #/2     * 0.0001
+    if _input['new_participant']:
+        supply  = supply + _input['new_participant_holding']
     
-    key = 'supply'
+    key = 'effective_supply'
     value = supply
     
     return (key, value)

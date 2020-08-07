@@ -109,17 +109,17 @@ def participants_decisions(params, step, sL, s):
     proposals = get_nodes_by_type(network, 'proposal')
     candidates = [j for j in proposals if network.nodes[j]['status']=='candidate']
     
-    gain = .01
     delta_holdings={}
     proposals_supported ={}
     for i in participants:
-        engagement_rate = .03*network.nodes[i]['sentiment']
+        engagement_rate = .3*network.nodes[i]['sentiment']
 
         #engagement_rate = .3*network.nodes[i]['sentiment']
         if np.random.rand()<engagement_rate:
         
-            force = network.nodes[i]['sentiment']-sys_params['sensitivity']
-            delta_holdings[i] = network.nodes[i]['holdings']*gain*force
+            # this variable can be used later to account for 
+            # participants trading with each other or with a liquidity pool
+            delta_holdings[i] = 0 
             
             support = []
             for j in candidates:
