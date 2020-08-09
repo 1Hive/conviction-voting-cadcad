@@ -4,8 +4,6 @@ from .conviction_helper_functions import *
 import networkx as nx
 from .sys_params import * 
 
-# hyperparameters
-mu = 0.01
 
 # Phase 2
 # Behaviors

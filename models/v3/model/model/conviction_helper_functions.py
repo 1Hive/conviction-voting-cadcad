@@ -83,7 +83,7 @@ def gen_new_participant(network, new_participant_holdings):
         
         a_rv = a_rv = np.random.uniform(-1,1,1)[0]
         network.edges[(i, j)]['affinity'] = a_rv
-        network.edges[(i,j)]['tokens'] = 0
+        network.edges[(i,j)]['tokens'] = 0 #a_rv*network.nodes[i]['holdings']
         network.edges[(i, j)]['conviction'] = 0
         network.edges[(i,j)]['type'] = 'support'
     

@@ -27,10 +27,10 @@ def driving_process(params, step, sL, s):
     candidate_subgraph = s['network'].subgraph(subgraph_nodes)
     supporters = get_edges_by_type(candidate_subgraph, 'support')
     
-    len_parts = len(participants)
-    supply = s['effective_supply'] 
-    
-    expected_holdings = .01*supply/len_parts
+    #len_parts = len(participants)
+    available_supply = s['total_supply']-s['effective_supply']
+
+    expected_holdings = .01*available_supply
     if new_participant:
         h_rv = expon.rvs(loc=0.0, scale=expected_holdings)
         new_participant_holdings = h_rv
@@ -62,8 +62,8 @@ def driving_process(params, step, sL, s):
     funds = s['funds']
     scale_factor = funds*sentiment**2/10000
     
-    if scale_factor <1:
-        scale_factor = 1
+    # if scale_factor <1:
+    #     scale_factor = 1
     
     #this shouldn't happen but expon is throwing domain errors
     # if sentiment>.4: 
@@ -76,8 +76,8 @@ def driving_process(params, step, sL, s):
             'new_proposal':new_proposal, #True/False
             'new_proposal_ct': new_proposal_ct, #int
             'new_proposal_requested':new_proposal_requested, #list funds requested by new proposal if True, len =ct
-            # 'funds_arrival':funds_arrival #quantity of new funds arriving to the communal pool (donations or revenue)
-            })
+#            'funds_arrival':funds_arrival
+            }) #quantity of new funds arriving to the communal pool (donations or revenue)
     
 # Mechanisms 
 def update_network(params, step, sL, s, _input):
@@ -136,13 +136,11 @@ def increment_supply(params, step, sL, s, _input):
 # Substep 2
 def minting_rule(params, step, sL, s):
     supply = s['total_supply']
-    tokens_to_mint = params['gamma'] * supply
+    tokens_to_mint = params['gamma'] * supply  #order 0.001 or smaller: expansion of supply per day  
     return ({'mint':tokens_to_mint})
 
 # Mechanisms 
 def mint_to_supply(params, step, sL, s, _input):
-    '''
-    '''
     mint = _input['mint']
     supply = s['total_supply']
 
@@ -152,8 +150,6 @@ def mint_to_supply(params, step, sL, s, _input):
     return (key, value)
 
 def mint_to_funds(params, step, sL, s, _input):
-    '''
-    '''
     mint = _input['mint']
     funds = s['funds']
 

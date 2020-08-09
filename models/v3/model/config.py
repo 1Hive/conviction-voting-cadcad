@@ -14,7 +14,7 @@ from .model.sys_params import *
 
 sim_config = config_sim({
     'N': 1,
-    'T': range(60), #day 
+    'T': range(100), #day 
     'M': params,
 })
 
