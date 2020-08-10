@@ -1,6 +1,6 @@
-from .model.system import *
-from .model.participants import *
-from .model.proposals import *
+from .parts.system import *
+from .parts.participants import *
+from .parts.proposals import *
 
 # The Partial State Update Blocks
 partial_state_update_blocks = [

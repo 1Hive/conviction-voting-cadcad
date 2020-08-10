@@ -16,7 +16,7 @@ params = {
     'alpha': [0.875], # timescale set in days with 3 day halflife (from comments in contract comments)
     'gamma': [0.001], # expansion of supply per per day
     'sensitivity': [.75],
-    'tmin': [0], #unit days; minimum periods passed before a proposal can pass
+    'tmin': [1], #unit days; minimum periods passed before a proposal can pass
     'min_supp': [1], #number of tokens that must be stake for a proposal to be a candidate
     'base_completion_rate': [45],
     'base_failure_rate': [180],

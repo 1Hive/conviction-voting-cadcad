@@ -1,5 +1,5 @@
 import pandas as pd
-from .model.conviction_helper_functions import * 
+from .parts.utils import * 
 from model import config 
 from cadCAD.engine import ExecutionMode, ExecutionContext
 exec_mode = ExecutionMode()

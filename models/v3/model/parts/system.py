@@ -1,7 +1,7 @@
 
 import numpy as np
 import pandas as pd
-from .conviction_helper_functions import * 
+from .utils import * 
 import networkx as nx
 from scipy.stats import expon, gamma
 
