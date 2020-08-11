@@ -9,11 +9,16 @@
 * [V2 - Full complexity model](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v2/Aragon_Conviction_Voting_Model.ipynb)
 * [V3 - 1Hive model](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Aragon_Conviction_Voting_Model.ipynb)
 
-## Current Deployment in 1Hive
+## Current CV Deployments
 
-The 1Hive community has been actively developing Conviction Voting contracts in collaboration with BlockScience and the Commons Stack since early 2019. They currently have a DAO live on the xDAI network at [1hive.org](https://www.1hive.org) that uses a native governance token (Honey) to allocate funds to proposals via Conviction Voting.
+### 1Hive
+The [1Hive](https://www.1hive.org) community has been actively developing Conviction Voting contracts in collaboration with BlockScience and the Commons Stack since early 2019. They currently have a DAO live on the xDAI network at [1hive.org](https://www.1hive.org) that uses a native governance token (Honey) to allocate funds to proposals via Conviction Voting.
 
 To see Conviction Voting deployed in smart contracts with a basic user interface, check out the [1Hive Github](https://github.com/1Hive/conviction-voting-app).
+
+### Commons Simulator
+
+The [Commons Stack](https://www.commonsstack.org) has been working on a 'Commons Simulator' to facilitate user understanding of these novel governance tools. Progress on Conviction Voting can be viewed in [the Commons Stack Github repo](https://github.com/commons-stack/coodcad/tree/bigrewrite).
 
 ## Background information & concepts addressed
 
