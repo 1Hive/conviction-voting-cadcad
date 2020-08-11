@@ -1,5 +1,5 @@
 import numpy as np
-from .conviction_helper_functions import * 
+from .utils import * 
 import networkx as nx
 
 
