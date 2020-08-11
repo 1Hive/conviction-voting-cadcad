@@ -1,15 +1,30 @@
 # Aragon_Conviction_Voting
 
-[Conviction Voting](https://medium.com/commonsstack/conviction-voting-a-novel-continuous-decision-making-alternative-to-governance-62e215ad2b3d) is a novel decision making process used to estimate real-time collective preference in a distributed work proposal system. Voters continuously express their preference by staking tokens in favor of proposals they would like to see approved, with the conviction (i.e. weight) of their vote growing over time. Collective conviction accumulates until it reaches a set threshold specified by a proposal according to the amount of funds requested, at which point it passes and funds are released so work may begin. Conviction voting improves on discrete voting processes by allowing participants to vote at any time, and moves from consensus to consent based decision making. This eliminates the governance bottleneck of large distributed communities, where a quorum of participants is required to vote on every proposal. In the conviction voting model, graph structures are used to represent participants and proposals, as well as participants private affinity and public conviction towards proposals.
+[Conviction Voting](https://medium.com/commonsstack/conviction-voting-a-novel-continuous-decision-making-alternative-to-governance-62e215ad2b3d) is a novel decision making process used to estimate real-time collective preference in a distributed work proposal system. Voters continuously express their preference by staking tokens in favor of proposals they would like to see approved, with the conviction (i.e. weight) of their vote growing over time. Collective conviction accumulates until it reaches a set threshold specified by a proposal according to the amount of funds requested, at which point it passes and funds are released so work may begin. Conviction voting improves on discrete voting processes by allowing participants to vote at any time, and eliminates the need for consensus on each proposal. This eliminates the governance bottleneck of large distributed communities, where a quorum of participants is required to vote on every proposal. 
 
 
 ## Simulations
 
-* [Initial model](models/v1/Aragon_Conviction_Voting_Model.ipynb)
-* [Intermediate model](models/v2/Aragon_Conviction_Voting_Model.ipynb)
-* [Current model](models/v3/Aragon_Conviction_Voting_Model.ipynb)
+* [V1 - Initial model](models/v1/Aragon_Conviction_Voting_Model.ipynb)
+* [V2 - Full complexity model](models/v2/Aragon_Conviction_Voting_Model.ipynb)
+* [V3 - 1Hive model](models/v3/Aragon_Conviction_Voting_Model.ipynb)
+
 
 ## Background information & concepts addressed
+
+### Conviction Voting Basics
+
+![](images/cv_background_1.PNG)
+
+Legacy voting systems face several difficulties in transforming private, distributed, continuous and time varying individual signals into public, centralized, discrete and event-based outcomes. Conviction Voting is a real-time governance tool designed to aggregate collective preferences, expressed continuously. 
+
+![](images/cv_background_2.png)
+
+As our governance toolkits continue to expand with novel tools like Conviction Voting, we can consider designing governance systems in the context of the community to which they belong. In the 1Hive community, holding Honey tokens gives you certain rights in the 1Hive organization. Below, we consider the rights granted, how those rights are controlled, the attack vectors they present, and how those vectors can be mitigated.
+
+![](images/cv_background_3.png)
+
+Conviction Voting offers us new insight into the collective intent of our communities. It offers us a richer signal of the emergent and dynamic preferences of a group, such that we can better understand and discuss important issues as communities. It eliminates attack vectors of ad hoc voting such as last minute vote swings, and reduces user friction by not requiring set times to cast a vote.  
 
 ### Conviction voting Algorithm
 Conviction voting is based on a linear system akin to a capacitor which provides "charging up" like dynamic and proposals pass when a certain level of collective energy is charged up. The details are explained and demonstrated throughout this repo but the best place to start is [Algorithm_Overview](algorithm_overview.md). For more details on the charging up mechanics and the parameter $\alpha$ see [Alpha Parameter Explainer](models/v3/Deriving_Alpha_and_parameters.ipynb) and for more details on the trigger function see [Trigger Function Explainer](models/v3/Trigger_Function_Explanation.ipynb).
