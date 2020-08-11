@@ -5,9 +5,9 @@
 
 ## Simulations
 
-* [V1 - Initial model](v1/Aragon_Conviction_Voting_Model.ipynb)
-* [V2 - Full complexity model](v2/Aragon_Conviction_Voting_Model.ipynb)
-* [V3 - 1Hive model](v3/Aragon_Conviction_Voting_Model.ipynb)
+* [V1 - Initial model](models/v1/Aragon_Conviction_Voting_Model.ipynb)
+* [V2 - Full complexity model](models/v2/Aragon_Conviction_Voting_Model.ipynb)
+* [V3 - 1Hive model](models/v3/Aragon_Conviction_Voting_Model.ipynb)
 
 
 ## Background information & concepts addressed
