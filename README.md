@@ -41,6 +41,7 @@ Then run cd Aragon_Conviction_Voting to enter the repository. Finally, run jupyt
 
 ### Complex systems
 
+* https://ergodicityeconomics.com/lecture-notes/
 * https://www.frontiersin.org/articles/10.3389/fams.2015.00007/full
 * https://epub.wu.ac.at/7433/1/zargham_paruch_shorish.pdf
 
