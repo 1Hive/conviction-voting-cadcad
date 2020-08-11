@@ -5,9 +5,16 @@
 
 ## Simulations
 
-* [Initial model](v1/Aragon_Conviction_Voting_Model.ipynb)
-* [Full complexity model](v2/Aragon_Conviction_Voting_Model.ipynb)
+* [V1 - Initial model](v1/Aragon_Conviction_Voting_Model.ipynb)
+* [V2 - Full complexity model](v2/Aragon_Conviction_Voting_Model.ipynb)
+* [V3 - 1Hive model](v3/Aragon_Conviction_Voting_Model.ipynb)
+
+
 ## Background information & concepts addressed
+
+### Conviction Voting Basics
+![](images/cv_background_1.png)
+
 
 ### What is cadCAD?
 cadCAD (complex adaptive dynamics Computer-Aided Design) is a python based modeling framework for research, validation, and Computer Aided Design of complex systems. Given a model of a complex system, cadCAD can simulate the impact that a set of actions might have on it. This helps users make informed, rigorously tested decisions on how best to modify or interact with the system in order to achieve their goals. cadCAD supports different system modeling approaches and can be easily integrated with common empirical data science workflows. Monte Carlo methods, A/B testing and parameter sweeping features are natively supported and optimized for.
