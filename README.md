@@ -5,14 +5,14 @@
 
 ## Simulations
 
-* [Initial model](v1/Aragon_Conviction_Voting_Model.ipynb)
-* [Intermediate model](v2/Aragon_Conviction_Voting_Model.ipynb)
-* [Current model](v3/Aragon_Conviction_Voting_Model.ipynb)
+* [Initial model](models/v1/Aragon_Conviction_Voting_Model.ipynb)
+* [Intermediate model](models/v2/Aragon_Conviction_Voting_Model.ipynb)
+* [Current model](models/v3/Aragon_Conviction_Voting_Model.ipynb)
 
 ## Background information & concepts addressed
 
 ### Conviction voting Algorithm
-Conviction voting is based on a linear system akin to a capacitor which provides "charging up" like dynamic and proposals pass when a certain level of collective energy is charged up. The details are explained and demonstrated throughout this repo but the best place to start is [Algorithm_Overview](algorithm_overview.md). For more details on the charging up mechanics and the parameter $\alpha$ see [Alpha Parameter Explainer](Deriving_Alpha_and_parameters.ipynb) and for more details on the trigger function see [Trigger Function Explainer](Trigger_Function_Explanation.ipynb).
+Conviction voting is based on a linear system akin to a capacitor which provides "charging up" like dynamic and proposals pass when a certain level of collective energy is charged up. The details are explained and demonstrated throughout this repo but the best place to start is [Algorithm_Overview](algorithm_overview.md). For more details on the charging up mechanics and the parameter $$\alpha$$ see [Alpha Parameter Explainer](Deriving_Alpha_and_parameters.ipynb) and for more details on the trigger function see [Trigger Function Explainer](Trigger_Function_Explanation.ipynb).
 
 ### What is cadCAD?
 cadCAD (complex adaptive dynamics Computer-Aided Design) is a python based modeling framework for research, validation, and Computer Aided Design of complex systems. Given a model of a complex system, cadCAD can simulate the impact that a set of actions might have on it. This helps users make informed, rigorously tested decisions on how best to modify or interact with the system in order to achieve their goals. cadCAD supports different system modeling approaches and can be easily integrated with common empirical data science workflows. Monte Carlo methods, A/B testing and parameter sweeping features are natively supported and optimized for.
@@ -24,7 +24,7 @@ cadCAD links:
 
 ### Reproducibility
 In order to reperform this code, we recommend the researcher use the following link https://www.anaconda.com/products/individual to download Python 3.7. To install the specific version of cadCAD this repository was built with, run the following code:
-pip install cadCAD==0.4.17
+pip install cadCAD==0.4.18
 
 Then run cd Aragon_Conviction_Voting to enter the repository. Finally, run jupyter notebook to open a notebook server to run the various notebooks in this repository.
 
