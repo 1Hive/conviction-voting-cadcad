@@ -4,7 +4,6 @@
 
 
 ## Simulations
-
 * [V1 - Initial model](models/v1/Aragon_Conviction_Voting_Model.ipynb)
 * [V2 - Full complexity model](models/v2/Aragon_Conviction_Voting_Model.ipynb)
 * [V3 - 1Hive model](models/v3/Aragon_Conviction_Voting_Model.ipynb)
@@ -25,7 +24,6 @@ As our governance toolkits continue to expand with novel tools like Conviction V
 ![](images/cv_background_3.png)
 
 Conviction Voting offers us new insight into the collective intent of our communities. It offers us a richer signal of the emergent and dynamic preferences of a group, such that we can better understand and discuss important issues as communities. It eliminates attack vectors of ad hoc voting such as last minute vote swings, and reduces user friction by not requiring set times to cast a vote.  
-
 
 
 ### What is cadCAD?
@@ -55,6 +53,7 @@ Then run cd Aragon_Conviction_Voting to enter the repository. Finally, run jupyt
 
 ### Complex systems
 
+* https://ergodicityeconomics.com/lecture-notes/
 * https://www.frontiersin.org/articles/10.3389/fams.2015.00007/full
 * https://epub.wu.ac.at/7433/1/zargham_paruch_shorish.pdf
 
