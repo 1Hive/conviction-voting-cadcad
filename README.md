@@ -13,7 +13,9 @@
 ## Background information & concepts addressed
 
 ### Conviction Voting Basics
-![](images/CV_background_1.PNG)
+![](images/cv_background_1.PNG)
+![](images/cv_background_2.png)
+![](images/cv_background_3.png)
 
 
 ### What is cadCAD?
