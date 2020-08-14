@@ -1,31 +1,8 @@
 import pandas as pd
 from .parts.utils import * 
 from model import config 
-from cadCAD.engine import ExecutionMode, ExecutionContext
-exec_mode = ExecutionMode()
-from cadCAD.engine import Executor
+from cadCAD.engine import ExecutionMode, ExecutionContext,Executor
 from cadCAD import configs
-
-# def run(input_config=configs):
-#     '''
-#     Definition:
-#     Run simulation
-
-#     Parameters:
-#     input_config: Optional way to pass in system configuration
-#     '''
-#     # Single
-#     exec_mode = ExecutionMode()
-#     local_mode_ctx = ExecutionContext(context=exec_mode.local_mode)
-
-#     simulation = Executor(exec_context=local_mode_ctx, configs=input_config)
-#     raw_system_events, tensor_field, sessions = simulation.execute()
-#     # Result System Events DataFrame
-#     df = pd.DataFrame(raw_system_events)
-
-#     return df
-
-
 
 def run():
     '''

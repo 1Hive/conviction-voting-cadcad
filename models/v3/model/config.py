@@ -49,7 +49,5 @@ def get_configs():
     Function to extract the configuration information for display in a notebook.
     '''
 
-    
-    sim_config,state_variables,seeds,partial_state_update_blocks
-    
-    return sim_config,state_variables,seeds,partial_state_update_blocks
+        
+    return sim_config,state_variables,partial_state_update_blocks
