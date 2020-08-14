@@ -11,7 +11,6 @@ from cadCAD import configs
 from .state_variables import state_variables
 from .partial_state_update_block import partial_state_update_blocks
 from .parts.sys_params import * 
-
 from .parts.utils import * 
 
 
@@ -49,6 +48,7 @@ def get_configs():
     '''
     Function to extract the configuration information for display in a notebook.
     '''
+
     
     sim_config,state_variables,seeds,partial_state_update_blocks
     
