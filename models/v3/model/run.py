@@ -67,6 +67,30 @@ def postprocessing(df, sim_ind=-1):
     df['triggers_all'] = df.network.apply(lambda g: np.array([g.nodes[j]['trigger'] for j in get_nodes_by_type(g, 'proposal')  ]))
 
     df['conviction_share_of_trigger_all'] = df.conviction_all/df.triggers_all
+    
+    # extract metrics
+    percentageOfActive = []
+    percentageOfCompleted = []
+    percentageOfKilled = []
+    for i in range(0,len(df.timestep)):
+        percentageOfActive.append(df.fractionOfProposalStages.values[i]['percentageOfActive'])
+        percentageOfCompleted.append(df.fractionOfProposalStages.values[i]['percentageOfCompleted'])
+        percentageOfKilled.append(df.fractionOfProposalStages.values[i]['percentageOfKilled'])
 
+    df['percentageOfActiveProposals'] = percentageOfActive
+    df['percentageOfCompletedProposals'] = percentageOfCompleted
+    df['percentageOfKilledProposals'] = percentageOfKilled
+
+    percentageOfActiveFundsRequested = []
+    percentageOfCompletedFundsRequested = []
+    percentageOfKilledFundsRequested = []
+    for i in range(0,len(df.timestep)):
+        percentageOfActiveFundsRequested.append(df.fractionOfFundStages.values[i]['percentageOfActiveFundsRequested'])
+        percentageOfCompletedFundsRequested.append(df.fractionOfFundStages.values[i]['percentageOfCompletedFundsRequested'])
+        percentageOfKilledFundsRequested.append(df.fractionOfFundStages.values[i]['percentageOfKilledFundsRequested'])
+
+    df['percentageOfActiveFundsRequested'] = percentageOfActiveFundsRequested
+    df['percentageOfCompletedFundsRequested'] = percentageOfCompletedFundsRequested
+    df['percentageOfKilledFundsRequested'] = percentageOfKilledFundsRequested
 
     return df

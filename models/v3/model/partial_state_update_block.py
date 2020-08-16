@@ -1,6 +1,7 @@
 from .parts.system import *
 from .parts.participants import *
 from .parts.proposals import *
+from .parts.metrics import *
 
 # The Partial State Update Blocks
 partial_state_update_blocks = [
@@ -53,5 +54,21 @@ partial_state_update_blocks = [
         'variables': {
             'network': update_tokens 
         }
+    },
+    {
+        # metrics.py
+        'policies': {
+            'calculations': kpi_calculations
+        },
+        'variables':{
+            'fractionOfSupplyForVoting': kpi_fractionOfSupplyForVoting,
+            'fractionOfSupplyInPool': kpi_fractionOfSupplyInPool,
+            'fractionOfProposalStages':kpi_proposal_stages,
+            'fractionOfFundStages': kpi_fractionOfFundStages
+        }
     }
+            
 ]
+
+            
+ 
