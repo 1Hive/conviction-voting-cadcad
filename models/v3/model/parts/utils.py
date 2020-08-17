@@ -7,8 +7,7 @@ import matplotlib.cm as cmx
 import seaborn as sns
 
 
-# note --> alpha is redundant with params since alpha is in params
-# we can simplify by removing alpha explicit dependence and just pull it as params['alpha']
+
 def trigger_threshold(requested, funds, supply, alpha, params):
     '''
     Function that determines threshold for proposals being accepted. 

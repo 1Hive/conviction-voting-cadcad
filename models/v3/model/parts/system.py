@@ -1,4 +1,3 @@
-
 import numpy as np
 import pandas as pd
 from .utils import * 
@@ -27,7 +26,6 @@ def driving_process(params, step, sL, s):
     candidate_subgraph = s['network'].subgraph(subgraph_nodes)
     supporters = get_edges_by_type(candidate_subgraph, 'support')
     
-    #len_parts = len(participants)
     available_supply = s['total_supply']-s['effective_supply']
 
     expected_holdings = .01*available_supply
@@ -62,14 +60,6 @@ def driving_process(params, step, sL, s):
     funds = s['funds']
     scale_factor = funds*sentiment**2/10000
     
-    # if scale_factor <1:
-    #     scale_factor = 1
-    
-    #this shouldn't happen but expon is throwing domain errors
-    # if sentiment>.4: 
-    #     funds_arrival = expon.rvs(loc = 0, scale = scale_factor)
-    # else:
-    #     funds_arrival = 0
     
     return({'new_participant':new_participant, #True/False
             'new_participant_holdings':new_participant_holdings, #funds held by new participant if True
