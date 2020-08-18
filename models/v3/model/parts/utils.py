@@ -425,13 +425,16 @@ def affinities_plot(df, dims = (8.5, 11) ):
 
 
 
-def trigger_sweep(field, trigger_func,params,supply=10**9):
+def trigger_sweep(field, trigger_func,params,supply=10**9, x_extra=.001):
     '''
     '''
-    xmax= params['beta']
+    rho = params['rho'][0]
+    beta = params['beta'][0]
+    xmax=beta- np.sqrt(rho)
+    alpha = params['alpha'][0]
 
     if field == 'effective_supply':
-        share_of_funds = np.arange(.001,xmax,.001)
+        share_of_funds = np.arange(0,xmax*(1+x_extra),.001)
         total_supply = np.arange(0,supply*10, supply/100) 
         demo_data_XY = np.outer(share_of_funds,total_supply)
 
@@ -443,8 +446,8 @@ def trigger_sweep(field, trigger_func,params,supply=10**9):
             sof = share_of_funds[sof_ind]
             for ts_ind in range(len(total_supply)):
                 ts = total_supply[ts_ind]
-                tc = ts /(1-params['alpha'])
-                trigger = trigger_func(sof, 1, ts, params['alpha'],params) 
+                tc = ts /(1-alpha)
+                trigger = trigger_func(sof, 1, ts, alpha,beta, rho) 
                 demo_data_Z0[sof_ind,ts_ind] = np.log10(trigger)
                 demo_data_Z1[sof_ind,ts_ind] = trigger
                 demo_data_Z2[sof_ind,ts_ind] = trigger/tc #share of maximum possible conviction
@@ -455,11 +458,11 @@ def trigger_sweep(field, trigger_func,params,supply=10**9):
                 'log10_share_of_max_conv':demo_data_Z3,
                 'total_supply':total_supply,
                 'share_of_funds':share_of_funds,
-                'alpha':params['alpha']}
+                'alpha':alpha}
     elif field == 'alpha':
         #note if alpha >.01 then this will give weird results max alpha will be >1
-        alpha = np.arange(0,.5,.001)
-        share_of_funds = np.arange(.001,xmax,.001)
+        alpha = np.arange(0,1,.001)
+        share_of_funds = np.arange(0,xmax*(1+x_extra),.001)
         demo_data_XY = np.outer(share_of_funds,alpha)
 
         demo_data_Z4=np.empty(demo_data_XY.shape)
@@ -472,7 +475,7 @@ def trigger_sweep(field, trigger_func,params,supply=10**9):
                 ts = supply
                 a = alpha[a_ind]
                 tc = ts /(1-a)
-                trigger = trigger_func(sof, 1, ts, a, params)
+                trigger = trigger_func(sof, 1, ts, a, beta, rho)
                 demo_data_Z4[sof_ind,a_ind] = np.log10(trigger)
                 demo_data_Z5[sof_ind,a_ind] = trigger
                 demo_data_Z6[sof_ind,a_ind] = trigger/tc #share of maximum possible conviction
@@ -506,12 +509,12 @@ def trigger_plotter(share_of_funds,Z, color_label,y, ylabel,cmap='jet'):
     cbar.ax.set_ylabel(color_label)
     
 def trigger_grid(supply_sweep, alpha_sweep):
-
+    
     fig, axs = plt.subplots(nrows=2, ncols=1,figsize=(20,20))
     axs = axs.flatten()
 
     share_of_funds = alpha_sweep['share_of_funds']
-    Z = alpha_sweep['log10_trigger']
+    Z = alpha_sweep['share_of_max_conv']
     y = alpha_sweep['alpha']
     ylabel = 'alpha'
     supply = alpha_sweep['supply']
@@ -520,27 +523,29 @@ def trigger_grid(supply_sweep, alpha_sweep):
     axs[0].axis([share_of_funds[0], share_of_funds[-1], y[0], y[-1]])
     axs[0].set_ylabel(ylabel)
     axs[0].set_xlabel('Share of Funds Requested')
+    axs[0].set_xticks(np.arange(0,.175,.025))
     axs[0].set_title('Trigger Function Map - Alpha sweep; Supply ='+str(supply))
-    cb0=plt.colorbar(cp0, ax=axs[0])
-    cb0.set_label('log10 of conviction to trigger')
+    cb0=plt.colorbar(cp0, ax=axs[0],ticks=np.arange(0,1.1,.1))
+    cb0.set_label('share of max conviction to trigger')
 
     
     share_of_funds = supply_sweep['share_of_funds']
-    Z = supply_sweep['log10_trigger']
+    Z = supply_sweep['share_of_max_conv']
     y = supply_sweep['total_supply']
     ylabel = 'Effective Supply'
     alpha = supply_sweep['alpha']
 
-    max_conv = y/(1-alpha)
+    #max_conv = y/(1-alpha)
 
     cp1=axs[1].contourf(share_of_funds, y, Z.T,100, cmap='jet', )
     axs[1].axis([share_of_funds[0], share_of_funds[-1], y[0], y[-1]])
     axs[1].set_ylabel(ylabel)
     axs[1].set_xlabel('Share of Funds Requested')
+    axs[1].set_xticks(np.arange(0,.175,.025))
     axs[1].set_title('Trigger Function Map - Supply sweep; alpha='+str(alpha))
-    axs[1].set_label('log10 of conviction to trigger')
-    cb1=plt.colorbar(cp1, ax=axs[1])
-    cb1.set_label('log10 of conviction to trigger')
+    #axs[1].set_label('log10 of conviction to trigger')
+    cb1=plt.colorbar(cp1, ax=axs[1], ticks=np.arange(0,1.1,.1))
+    cb1.set_label('share of max conviction to trigger')
 
 
 def initialize_network(n,m, initial_funds, supply, params):
