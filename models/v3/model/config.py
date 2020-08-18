@@ -41,7 +41,7 @@ for c in configs:
     print("Params (config.py) : ", c.sim_config['M'])
 
     c.initial_state['network'] = initialize_network(initial_values['n'],initial_values['m'],
-                                            initial_values['initial_funds'],
+                                            initial_values['funds'],
                                             initial_values['supply'],c.sim_config['M'])
 
 def get_configs():

@@ -2,10 +2,10 @@ import numpy as np
 
 # Initial values
 initial_values = {
-    'initial_sentiment': 0.6,
+    'sentiment': 0.6,
     'n': 30, #initial participants
     'm': 7, #initial proposals
-    'initial_funds': 4867.21, # in honey, as of 8-5-2020
+    'funds': 4867.21, # in honey, as of 8-5-2020
     'supply': 22392.22, # Honey total supply balance as of 8-5-2020  
 }
 
