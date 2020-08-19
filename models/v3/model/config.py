@@ -34,16 +34,7 @@ exp.append_configs(
 )
 
 
-# Initialize network x
-for c in configs:
-    c.initial_state = deepcopy(c.initial_state)
-
-    print("Params (config.py) : ", c.sim_config['M'])
-
-    c.initial_state['network'] = initialize_network(initial_values['n'],initial_values['m'],
-                                            initial_values['funds'],
-                                            initial_values['supply'],c.sim_config['M'])
-
+    
 def get_configs():
     '''
     Function to extract the configuration information for display in a notebook.

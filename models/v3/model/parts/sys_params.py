@@ -1,23 +1,35 @@
 import numpy as np
 
+# Define parameter values
+beta = int(0.2) # maximum share of funds a proposal can take
+rho = 0.0025 # tuning param for the trigger function
+# Alpha from solidity code - uint256 _decay = 9999599; // 3 days halftime. halftime_alpha = (1/2)**(1/t)
+# Half life associated with solidity code alpha (in number of blocks on xDai). 
+# Our simulation is associated with timesteps, so our half life is based of of days.
+alpha = 2**(-1/3) # timescale set in days with 3 day halflife
+
+
+
 # Initial values
 initial_values = {
     'sentiment': 0.6,
     'n': 30, #initial participants
     'm': 7, #initial proposals
     'funds': 4867.21, # in honey, as of 8-5-2020
-    'supply': 22392.22, # Honey total supply balance as of 8-5-2020  
+    'supply': 22392.22, # Honey total supply balance as of 8-5-2020
+    'params': { 'beta': beta, 
+                'rho': rho, # tuning param for the trigger function
+                'alpha': alpha
+              },
 }
 
 
-# Alpha from solidity code - uint256 _decay = 9999599; // 3 days halftime. halftime_alpha = (1/2)**(1/t)
-# Half life associated with solidity code alpha (in number of blocks on xDai). 
-# Our simulation is associated with timesteps, so our half life is based of of days.
+
 # Parameters
 params = {
-    'beta': [0.2], # maximum share of funds a proposal can take
-    'rho': [0.0025], # tuning param for the trigger function
-    'alpha': [2**(-1/3)], # timescale set in days with 3 day halflife (see above)
+    'beta': [beta], 
+    'rho': [rho], 
+    'alpha': [alpha], 
     'gamma': [0.001], # expansion of supply per per day
     'sensitivity': [.75],
     'tmin': [1], #unit days; minimum periods passed before a proposal can pass
