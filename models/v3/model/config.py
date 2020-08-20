@@ -15,7 +15,8 @@ from .parts.utils import *
 
 
 sim_config = config_sim({
-    'T': range(100), #day 
+    # 'T': range(100), #day
+    'T': range(20), #day
     'N': 1,
     'M': params,
 })
