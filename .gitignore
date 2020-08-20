@@ -2,3 +2,8 @@ __pycache__
 .vscode
 .ipynb_checkpoints
 .DS_Store
+.idea
+models/__pycache__
+models/v3/__pycache__
+models/v3/model/__pycache__
+models/v3/model/parts/__pycache__
