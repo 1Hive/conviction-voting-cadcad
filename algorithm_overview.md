@@ -62,6 +62,7 @@ ___
 For a deeper exploration of the $alpha$ parameter, please read more in the [Deriving Alpha notebook](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Deriving_Alpha.ipynb)
 
 # TODO: Jeff to move below links to Alpha notebook
+
 <https://www.desmos.com/calculator/x9uc6w72lm>
 <https://www.desmos.com/calculator/0lmtia9jql>
 
