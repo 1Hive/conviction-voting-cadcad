@@ -110,15 +110,17 @@ ___
 
  Notation | Definition|
 |--- | --- |
-|$\mathcal{A}_t$ | |
-|$\mathcal{C}_t$ | |
-|$n_t$ | |
-|$m_t$ | |
-|$W_t$ | |
-|$X_t$ | Individual participant conviction at time t|
-|$y_t$ | Total aggregated community conviction at time t|
-|$y^*_t$ | |
-|$R_t$ | Available resources in the communal funding pool|
+|$\mathcal{A}_t$ | The set of all governance agents/participants at time t |
+|$\mathcal{C}_t$ | The set of all candidate proposals at time t |
+|$n_t$ | The number of agents/participants at time t |
+|$m_t$ | The number of candidate proposals at time t |
+|$W_t$ | The matrix private preferences of n agents over m proposals |
+|$h_t$ |  The active token holdings of an agent at time t  (Note: the sum of h over all agents is equivalent to the effective supply) |
+|$x_t$ | The sum of tokens supporting a proposal at time t |
+|$X_t$ | The matrix of tokens from n agents supporting m proposals at time t |
+|$y_t$ | Total community conviction for a proposal at time t|
+|$y^*_t$ | Trigger function threshold for a proposal at time t |
+|$R_t$ | Total available resources in the proposal funding pool|
 |$S_t$ | Effective supply of tokens available for community governance|
 
 <br> 
@@ -184,5 +186,5 @@ e.g. $f(z) = \frac{\rho S }{(1-\alpha)(z-\beta)^2}$
     * to prevent small proposal spamming from draining the communal funding pool, all proposals should have some minimum conviction required to pass
 * Effective supply
     * to avoid slow conviction aggregation due to "inactive" tokens (e.g. locked up in cold storage or liquidity pool, without active participation in governance), effective supply is the portion of tokens that are active in community governance
-* Proposal statuses
-    * proposals can exist in multiple status types, which can be expanded as this model grows
+* Proposal Approval & Feedback Process
+    * the proposal process could make use of additional mechanisms like fund escrow, proposal backlog processes, reviews/validation & disputability/contestation to ensure that the incentive to game the system is kept to a minimum through responsible community oversight

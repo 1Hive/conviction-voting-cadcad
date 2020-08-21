@@ -7,7 +7,7 @@ This cadCAD model and notebook series is a collaboration between [Aragon Project
 ## Table of Contents
 ### 1. Supporting documentation for context
 * [Readme doc]() (you are here): For a high level exploration of Conviction Voting and what exactly we're trying to do with this model, start right here.
-* [Conviction Voting Algorithm Overview](https://github.com/BlockScience/Aragon_Conviction_Voting/blob/master/algorithm_overview.md): For a deeper understanding of the CV algorithm, including it's mathematical derivation, read this document
+* [Conviction Voting Algorithm Overview](https://hackmd.io/1VQ9uC1tRKOSJHKRElRN8Q?view): For a deeper understanding of the CV algorithm, including it's mathematical derivation, read this document
 * [Deriving the Alpha Parameter](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Deriving_Alpha.ipynb): For an in-depth look at the specific considerations around the alpha parameter, which sets the half life decay of conviction, read this notebook
 * [Explaining the Trigger Function](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Trigger_Function_Explanation.ipynb): For an in-depth look at the trigger function equation and how proposals pass from candidate to active status, read this notebook
 
