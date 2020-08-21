@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.cm as cmx
 import seaborn as sns
-
+from copy import deepcopy
+#from cadCAD import configs
 
 
 def trigger_threshold(requested, funds, supply, alpha, params):
@@ -243,7 +244,7 @@ def social_affinity_booster(network, proposal, participant):
     return np.sum(boosts)
     
 
-def snap_plot(nets, size_scale = 1/10, dims = (30,30), savefigs=False):
+def snap_plot(nets, size_scale = 1/10, dims = (10,10), savefigs=False):
     '''
     '''
 
@@ -333,18 +334,10 @@ def snap_plot(nets, size_scale = 1/10, dims = (30,30), savefigs=False):
             tokens = net.edges[e]['tokens']
             included_edge_color[ind] = scalarMap.to_rgba(tokens)
         
-            # nx.draw(net,
-            #         pos=pos, 
-            #         node_size = node_size,
-            #         node_color = node_color, 
-            #         edge_color = included_edge_color, 
-            #         edgelist=included_edges,
-            #         labels = net_node_label)
-            # plt.title('Tokens Staked by Partipants to Proposals')
     
             
         else:
-            plt.figure()
+            plt.figure(figsize=dims)
             nx.draw(net,
                 pos=pos, 
                 node_size = node_size,
@@ -358,7 +351,6 @@ def snap_plot(nets, size_scale = 1/10, dims = (30,30), savefigs=False):
             plt.xticks([])
             plt.yticks([])
             if savefigs:
-                #plt.savefig('images/' + unique_id+'_fig'+str(counter)+'.png')
                 plt.savefig('images/snap/'+str(counter)+'.png',bbox_inches='tight')
 
                 counter = counter+1
@@ -391,13 +383,14 @@ def make2D(key, data, fill=False):
 
 
 
-def affinities_plot(df, dims = (8.5, 11) ):
+def affinities_plot(network, dims = (20, 5)):
     '''
     '''
-    last_net= df.network.values[-1]
-    last_props=get_nodes_by_type(last_net, 'proposal')
+
+        
+    last_props=get_nodes_by_type(network, 'proposal')
     M = len(last_props)
-    last_parts=get_nodes_by_type(last_net, 'participant')
+    last_parts=get_nodes_by_type(network, 'participant')
     N = len(last_parts)
 
     affinities = np.empty((N,M))
@@ -405,7 +398,7 @@ def affinities_plot(df, dims = (8.5, 11) ):
         for j_ind in range(M):
             i = last_parts[i_ind]
             j = last_props[j_ind]
-            affinities[i_ind][j_ind] = last_net.edges[(i,j)]['affinity']
+            affinities[i_ind][j_ind] = network.edges[(i,j)]['affinity']
 
     fig, ax = plt.subplots(figsize=dims)
 
@@ -586,7 +579,8 @@ def initialize_network(n,m, initial_funds, supply, params):
         network.nodes[j]['status'] = 'candidate'
         network.nodes[j]['age'] = 0
         
-        r_rv = gamma.rvs(3,loc=0.001, scale=500)
+        # This is a gamma random variable (wikipedia link) - scipy link
+        r_rv = gamma.rvs(3,loc=0.001, scale=(initial_funds * params['beta'])*.05)
         network.nodes[j]['funds_requested'] = r_rv
         
         network.nodes[j]['trigger']= trigger_threshold(r_rv, initial_funds, initial_supply, params['alpha'],params)
@@ -608,3 +602,21 @@ def initialize_network(n,m, initial_funds, supply, params):
         network = initial_social_network(network, scale = 1)
         
     return network
+
+
+def config_initialization(configs,initial_values):
+    '''
+    from copy import deepcopy
+    from cadCAD import configs
+    '''
+    # Initialize network x
+    for c in configs:
+        c.initial_state = deepcopy(c.initial_state)
+
+        print("Params (config.py) : ", c.sim_config['M'])
+
+        c.initial_state['network'] = initialize_network(initial_values['n'],initial_values['m'],
+                                                initial_values['funds'],
+                                                initial_values['supply'],c.sim_config['M'])
+        
+        return c.initial_state['network']

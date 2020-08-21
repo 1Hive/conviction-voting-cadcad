@@ -104,7 +104,7 @@ cadCAD links:
 
 ## Model Reproducibility
 In order to reperform this code, we recommend the researcher use the following link https://www.anaconda.com/products/individual to download Python 3.7. To install the specific version of cadCAD this repository was built with, run the following code:
-pip install cadCAD==0.4.18
+pip install cadCAD==0.4.21
 
 Then run cd Aragon_Conviction_Voting to enter the repository. Finally, run jupyter notebook to open a notebook server to run the various notebooks in this repository.
 

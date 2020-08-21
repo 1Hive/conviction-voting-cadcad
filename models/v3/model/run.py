@@ -8,9 +8,6 @@ def run():
     '''
     Definition:
     Run simulation
-
-    Parameters:
-    input_config: Optional way to pass in system configuration
     '''
     # Single
     exec_mode = ExecutionMode()
