@@ -46,7 +46,7 @@ The notebooks contained here are a mix of code snippets, explainer content, simu
 
 ![](images/cv_background_1.PNG)
 
-Legacy voting systems face several difficulties in transforming private, distributed, continuous and time varying individual signals into public, centralized, discrete and event-based outcomes. Conviction Voting is a real-time governance tool designed to aggregate collective preferences, expressed continuously. 
+Legacy voting systems face several difficulties in transforming private, distributed, continuous and time varying individual signals (e.g. desiring our roads to be safer) into public, centralized, discrete and event-based collective outcomes (e.g. filling potholes on streets in your neighbourhood). Conviction Voting is a real-time governance tool designed to aggregate collective preferences, expressed continuously. 
 
 ![](images/cv_background_2.png)
 
@@ -71,7 +71,7 @@ The design space for this new governance tool is wide and unexplored. From its a
 There are likely to be many more useful applications of this real-time governance tool in community decision making and beyond. We look forward to continuing this research and creating the open source foundations of models which can be iterated towards widely varying scenarios for creating high leverage impact.
 
 ## Conviction Voting In-Depth
-Conviction voting is based on a linear system akin to a capacitor which "charges up" dynamically and proposals pass when a certain level of collective energy is reached. The details are explained and demonstrated throughout this repo but the best place to start is the [Conviction Voting Algorithm Overview](algorithm_overview.md). For more details on the charging up mechanics and the parameter $\alpha$ see the [Deriving Alpha Parameter Explainer](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Deriving_Alpha.ipynb) notebook and for more details on the proposal passing mechanism,  see the [Trigger Function Explainer](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Trigger_Function_Explanation.ipynb) notebook.
+Conviction voting is based on a linear system akin to a capacitor which "charges up" dynamically and proposals pass when a certain level of collective energy is reached. The details are explained and demonstrated throughout this repo but the best place to start is the [Conviction Voting Algorithm Overview](algorithm_overview.md). For more details on the charging up mechanics and the alpha parameter see the [Deriving Alpha Parameter Explainer](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Deriving_Alpha.ipynb) notebook and for more details on the proposal passing mechanism,  see the [Trigger Function Explainer](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Trigger_Function_Explanation.ipynb) notebook.
 
 <br>
 

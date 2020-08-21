@@ -1,4 +1,4 @@
-# Mathematically Formalizing to the Conviction Voting Algorithm
+# Mathematically Formalizing the Conviction Voting Algorithm
 
 ## Background
 ---
