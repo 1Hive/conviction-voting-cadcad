@@ -24,31 +24,19 @@ This cadCAD model and notebook series is a collaboration between [Aragon Project
 ___
 <br>
  
-# Current CV Deployments
-
-## 1Hive
-The [1Hive](https://www.1hive.org) community has been actively developing Conviction Voting contracts in collaboration with BlockScience and the Commons Stack since early 2019. They currently have a DAO live on the xDAI network at [1hive.org](https://www.1hive.org) that uses a native governance token (Honey) to allocate funds to proposals via Conviction Voting.
-
-To see Conviction Voting deployed in smart contracts with a basic user interface, check out the [1Hive Github](https://github.com/1Hive/conviction-voting-app).
-
-## Commons Simulator
-
-The [Commons Stack](https://www.commonsstack.org) has been working on a 'Commons Simulator' to facilitate user understanding of these novel governance tools. Progress on Conviction Voting can be viewed in [the Commons Stack Github repo](https://github.com/commons-stack/coodcad/tree/bigrewrite).
-
-<br>
-
-___
 
 # Background information & concepts addressed
 
 ## What is this cadCAD model trying to do?
-In cyber-physical systems like international power grids or global flight networks, engineers use digital twins, simulated replicas of their system. These models help to manage the complexity of systems that have trillions of data points and are constantly in flux. These simulations channel the information into pathways that allow humans to understand what is going on in their system at a high level, so they can intervene where and as appropriate. 
+In cyber-physical systems like international power grids, global flight networks, or socioeconomic community ecosystems, engineers model simulated replicas of their system, called digital twins. These models help to manage the complexity of systems that have trillions of data points and are constantly in flux. These simulations channel the information into pathways that allow humans to understand what is going on in their ecosystem at a high level, so they can intervene where and as appropriate. (Like hitting a breaker switch when a fault is cleared in a power system).
 
 ![img](https://i.imgur.com/kb4Tnh6.jpg)
 
-Digital twins can be considered like a flight simulator, which can be used to run your system through a billion different "tests", varying one parameter at a time, to see what effects may throw your system out of balance. As engineers with public safety in mind, we must understand the tipping points of our systems, and ensure mechanisms are set to push the system back towards balance when they enter their boundary conditions of safety.
+Digital twins can be considered like a flight simulator, which can be used to run your system through a billion different "tests", varying one parameter at a time, to see what effects may throw your system out of balance. As engineers with public safety in mind, we must understand the tipping points of our systems, and ensure mechanisms are in place to push the system back towards balance if and when they enter their boundary conditions of safety.
 
-This model is a digital twin of Conviction Voting, as applied in the 1Hive DAO ecosystem. It can be used to provide operational support in decision making both during the design stage, and also in the continuous governance of the 1Hive system, providing [Computer Aided Governance](https://medium.com/block-science/computer-aided-governance-cag-a-revolution-in-automated-decision-support-systems-9faa009e57a2) for 1Hive members. 
+This cadCAD model is a digital twin of Conviction Voting, as applied in the 1Hive DAO ecosystem. It can be used to provide operational support in decision making both during the design stage, and also in the continuous governance of the 1Hive system, providing [Computer Aided Governance](https://medium.com/block-science/computer-aided-governance-cag-a-revolution-in-automated-decision-support-systems-9faa009e57a2) for 1Hive members. 
+
+The notebooks contained here are a mix of code snippets, explainer content, simulations, and a whole lot of background to get you more familiar with CV as a concept, and perhaps even diving into modelling similar systems, or extending this model even further using cadCAD. If you have any questions about this model or how to build with it in cadCAD, feel free to email jeff@block.science.
 
 <br>
 
@@ -85,6 +73,21 @@ There are likely to be many more useful applications of this real-time governanc
 
 ## Conviction Voting In-Depth
 Conviction voting is based on a linear system akin to a capacitor which "charges up" dynamically and proposals pass when a certain level of collective energy is reached. The details are explained and demonstrated throughout this repo but the best place to start is the [Conviction Voting Algorithm Overview](algorithm_overview.md). For more details on the charging up mechanics and the parameter $\alpha$ see the [Deriving Alpha Parameter Explainer](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Deriving_Alpha.ipynb) notebook and for more details on the proposal passing mechanism,  see the [Trigger Function Explainer](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Trigger_Function_Explanation.ipynb) notebook.
+
+<br>
+
+___
+
+# Current CV Experiments
+
+## 1Hive
+The [1Hive](https://www.1hive.org) community has been actively developing Conviction Voting contracts in collaboration with BlockScience and the Commons Stack since early 2019. They currently have a DAO live on the xDAI network at [1hive.org](https://www.1hive.org) that uses a native governance token (Honey) to allocate funds to proposals via Conviction Voting.
+
+To see Conviction Voting deployed in smart contracts with a basic user interface, check out the [1Hive Github](https://github.com/1Hive/conviction-voting-app).
+
+## Commons Simulator
+
+The [Commons Stack](https://www.commonsstack.org) has been working on a 'Commons Simulator' to facilitate user understanding of these novel governance tools. Progress on Conviction Voting can be viewed in [the Commons Stack Github repo](https://github.com/commons-stack/coodcad/tree/bigrewrite).
 
 <br>
 

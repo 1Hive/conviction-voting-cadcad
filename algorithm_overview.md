@@ -1,5 +1,7 @@
-# An Introduction to Conviction Voting
+# Mathematically Formalizing to the Conviction Voting Algorithm
 
+## Background
+---
 Conviction Voting is an approach to organizing a communities preferences into discrete decisions in the management of that communities resources. Strictly speaking conviction voting is less like voting and more like signal processing. Framing the approach and the initial algorithm design was done by Michael Zargham and published in a short research proposal [Social Sensor Fusion](https://github.com/BlockScience/conviction/blob/master/social-sensorfusion.pdf). This work is based on a dynamic resource allocation algorithm presented in Dr. Zargham's PhD Thesis.
 
 The work proceeded in collaboration with the Commons Stack, including expanding on the python implementation to makeup part of the Commons Simulator game. An implemention of Conviction Voting as a smart contract within the Aragon Framework was developed by [1Hive](https://1hive.org/) and is currently being used for community decision making around allocations their community currency, Honey.
@@ -61,12 +63,6 @@ In the above diagram, we examine the proposal view. Proposal $j$ with total conv
 ___
 For a deeper exploration of the $alpha$ parameter, please read more in the [Deriving Alpha notebook](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Deriving_Alpha.ipynb)
 
-# TODO: Jeff to move below links to Alpha notebook
-
-<https://www.desmos.com/calculator/x9uc6w72lm>
-<https://www.desmos.com/calculator/0lmtia9jql>
-
-<https://p2pmodels.github.io/cs-sim/>
 
 ## Converting Signals to Discrete Decisions
 ___
@@ -77,8 +73,6 @@ Conviction can be considered like a fluctuating kinetic energy, with the Trigger
 ___
 For a deeper exploration of the trigger function, please read more in the [Trigger Function Explainer notebook](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Trigger_Function_Explanation.ipynb)
 
-# TODO: Jeff to move below links to Trigger notebook
-<https://www.desmos.com/calculator/yxklrjs5m3>
 
 ### Resolving Passed Proposals
 ___
@@ -111,11 +105,9 @@ In the conviction voting model, multiple graph structures are used to represent 
 ![Proposal Conflict Graph](https://i.imgur.com/CNjLhmr.png)
 
 ## Glossary of Notation
+___
+### Summary of State Variables
 
-### Summary State Variables
-___
-# TODO: Z help Jeff fill these out
-___
  Notation | Definition|
 |--- | --- |
 |$\mathcal{A}_t$ | |
@@ -130,6 +122,7 @@ ___
 |$S_t$ | Effective supply of tokens available for community governance|
 
 <br> 
+<br>
 
 ## Summary Laws of Motion / State Transition
 
@@ -184,7 +177,7 @@ e.g. $f(z) = \frac{\rho S }{(1-\alpha)(z-\beta)^2}$
 ## Additional Considerations when Deploying CV
 
 * Timescales
-    * whether your system is operating in block times, or more human understandable timescales like days or weeks, these considerations need to be factored into your model
+    * whether your system is operating in block times, or more human understandable timescales like hours, days or weeks, these considerations need to be factored into your model
 * Minimum candidacy times
     * proposals should be active for a minimum period to ensure appropriate dialog occurs within the community, regardless of level of support
 * Minimum conviction required for small proposals
