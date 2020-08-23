@@ -1,4 +1,4 @@
-## cadCAD Model Structure Overview
+# cadCAD Model Structure Overview
 
 In the cadCAD simulation [methodology](https://community.cadcad.org/t/differential-specification-syntax-key/31), we operate on four layers: **Policies, Mechanisms, States**, and **Metrics**. Information flows do not have explicit feedback loop unless noted. **Policies** determine the inputs into the system dynamics, and can come from user input, observations from the exogenous environment, or algorithms. **Mechanisms** are functions that take the policy decisions and update the States to reflect the policy level changes. **States** are variables that represent the system quantities at the given point in time, and **Metrics** are computed from state variables to assess the health of the system, essentially views on a complex data structure. Metrics can often be thought of as KPIs, or Key Performance Indicators. 
 
@@ -12,6 +12,7 @@ cadCAD models are micro founded with metrics being at the macro or the instituti
 <br>
 
 ## Differential Specification Diagram
+# TODO: FIX IMAGE
 ![](images/Aragon_v3.png)
 
 ## Model File structure
