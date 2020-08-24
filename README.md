@@ -6,10 +6,11 @@ This cadCAD model and notebook series is a collaboration between [Aragon Project
 
 ## Table of Contents
 ### 1. Supporting documentation for context
-* [Readme doc]() (you are here): For a high level exploration of Conviction Voting and what exactly we're trying to do with this model, start right here.
-* [Conviction Voting Algorithm Overview](https://github.com/BlockScience/Aragon_Conviction_Voting/blob/master/algorithm_overview.md): For a deeper understanding of the CV algorithm, including it's mathematical derivation, read this document
+* [Readme doc]() (you are here): For an overview of Conviction Voting and what exactly we're trying to do with this model, start right here.
+* [Conviction Voting Algorithm Derivation](https://hackmd.io/1VQ9uC1tRKOSJHKRElRN8Q?view): For a deeper understanding of the CV algorithm, including it's mathematical derivation, read this document
 * [Deriving the Alpha Parameter](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Deriving_Alpha.ipynb): For an in-depth look at the specific considerations around the alpha parameter, which sets the half life decay of conviction, read this notebook
 * [Explaining the Trigger Function](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Trigger_Function_Explanation.ipynb): For an in-depth look at the trigger function equation and how proposals pass from candidate to active status, read this notebook
+
 
 
 ### 2. Simulation Notebooks
@@ -17,7 +18,7 @@ This cadCAD model and notebook series is a collaboration between [Aragon Project
 * [V3 - 1Hive model](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Aragon_Conviction_Voting_Model.ipynb): The latest notebook iteration of CV, modeling 1Hive's deployment
 * [V2 - Increased complexity model](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v2/Aragon_Conviction_Voting_Model.ipynb): a former version of the CV model with increased mechanism complexity over v1
 * [V1 - Initial model](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v1/Aragon_Conviction_Voting_Model.ipynb): the simplest version of the CV model. Start here if you are looking to understand and replicate this model in cadCAD
-
+* [Model Structure](https://github.com/BlockScience/Aragon_Conviction_Voting/blob/master/model_structure.md): a deeper look into the structure of the cadCAD model. Read this document if you are learning how to work with system modelling in cadCAD.
 <br>
 
 ___
