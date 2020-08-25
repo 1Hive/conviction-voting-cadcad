@@ -84,7 +84,7 @@ def gen_new_participant(network, new_participant_holdings):
         
         a_rv = a_rv = np.random.uniform(-1,1,1)[0]
         network.edges[(i, j)]['affinity'] = a_rv
-        network.edges[(i,j)]['tokens'] = 0 #a_rv*network.nodes[i]['holdings']
+        network.edges[(i,j)]['tokens'] = 0 
         network.edges[(i, j)]['conviction'] = 0
         network.edges[(i,j)]['type'] = 'support'
     
@@ -546,7 +546,11 @@ def initialize_network(n,m, initial_funds, supply, params):
     Function to initialize network x object
 
     Parameters:
-
+    n: 
+    m:
+    initial_funds:
+    supply:
+    params
     Assumptions:
 
     Returns:
@@ -559,7 +563,11 @@ def initialize_network(n,m, initial_funds, supply, params):
     for i in range(n):
         network.add_node(i)
         network.nodes[i]['type']= "participant"
-        
+      
+        # This is an exponential random variable with a shape (loc) and scale parameter to drive the shape of the distributino. 
+        # See the two links below to learn more about it. 
+        # https://en.wikipedia.org/wiki/Exponential_distribution
+        # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.expon.html
         h_rv = expon.rvs(loc=0.0, scale= supply/n)
         network.nodes[i]['holdings'] = h_rv 
         
@@ -579,7 +587,10 @@ def initialize_network(n,m, initial_funds, supply, params):
         network.nodes[j]['status'] = 'candidate'
         network.nodes[j]['age'] = 0
         
-        # This is a gamma random variable (wikipedia link) - scipy link
+        # This is a gamma random variable with a shape (loc) and scale parameter to drive the shape of the distributino. 
+        # See the two links below to learn more about it. 
+        # https://en.wikipedia.org/wiki/Gamma_distribution
+        # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gamma.html
         r_rv = gamma.rvs(3,loc=0.001, scale=(initial_funds * params['beta'])*.05)
         network.nodes[j]['funds_requested'] = r_rv
         
@@ -589,6 +600,8 @@ def initialize_network(n,m, initial_funds, supply, params):
             network.add_edge(i, j)
             
             rv = np.random.rand()
+            # see below for information on the uniform distribution. In this case, the values will be between -1 and 1
+            # https://numpy.org/doc/stable/reference/random/generated/numpy.random.uniform.html 
             a_rv = np.random.uniform(-1,1,1)[0]
             network.edges[(i, j)]['affinity'] = a_rv
             network.edges[(i, j)]['tokens'] = 0
@@ -620,3 +633,23 @@ def config_initialization(configs,initial_values):
                                                 initial_values['supply'],c.sim_config['M'])
         
         return c.initial_state['network']
+    
+    
+def schema_check(simulation_results,schema_dictionary,cadCAD_columns = ['simulation','subset','run','substep','timestep']):
+    '''
+    Description:
+    
+    Parameters:
+    simulation_result: cadCAD simulation results dataframe
+    schema_dictionary: state schema dictionary
+    cadCAD_columns: optional, list of cadCAD columns
+    
+    Returns:
+    {'state': Boolean}
+    '''
+    schema_check = {}
+    for i in simulation_results.columns:
+        if i not in cadCAD_columns:
+            result = type(simulation_results[str(i)].values[-1]) == type(schema_dictionary[str(i)])
+            schema_check[i] = result
+    return schema_check       

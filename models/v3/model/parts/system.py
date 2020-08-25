@@ -66,8 +66,7 @@ def driving_process(params, step, sL, s):
             'new_proposal':new_proposal, #True/False
             'new_proposal_ct': new_proposal_ct, #int
             'new_proposal_requested':new_proposal_requested, #list funds requested by new proposal if True, len =ct
-#            'funds_arrival':funds_arrival
-            }) #quantity of new funds arriving to the communal pool (donations or revenue)
+            }) 
     
 # Mechanisms 
 def update_network(params, step, sL, s, _input):

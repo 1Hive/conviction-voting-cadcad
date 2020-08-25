@@ -50,8 +50,6 @@ def complete_proposal(params, step, sL, s, _input):
         for c in proposals:
              if (j,c) in competitors:
                  conflict = network.edges[(j,c)]['conflict']
-#                  for i in participants:
-#                      network.edges[(i,c)]['affinity'] = network.edges[(i,c)]['affinity'] *(1-conflict)
 
         for i in participants:
             force = network.edges[(i,j)]['affinity']
