@@ -2,14 +2,14 @@
 
 ## Background
 ---
-Conviction Voting is an approach to organizing a communities preferences into discrete decisions in the management of that communities resources. Strictly speaking conviction voting is less like voting and more like signal processing. Framing the approach and the initial algorithm design was done by Michael Zargham and published in a short research proposal [Social Sensor Fusion](https://github.com/BlockScience/conviction/blob/master/social-sensorfusion.pdf). This work is based on a dynamic resource allocation algorithm presented in Dr. Zargham's PhD Thesis.
+Conviction Voting is an approach to organizing a community's preferences into discrete decisions in the management of that community's resources. Strictly speaking conviction voting is less like voting and more like signal processing. Framing the approach and the initial algorithm design was done by Michael Zargham and published in a short research proposal [Social Sensor Fusion](https://github.com/BlockScience/conviction/blob/master/social-sensorfusion.pdf). This work is based on a dynamic resource allocation algorithm presented in Dr. Zargham's PhD Thesis.
 
-The work proceeded in collaboration with the Commons Stack, including expanding on the python implementation to makeup part of the Commons Simulator game. An implemention of Conviction Voting as a smart contract within the Aragon Framework was developed by [1Hive](https://1hive.org/) and is currently being used for community decision making around allocations their community currency, Honey.
+The work proceeded in collaboration with the Commons Stack, including expanding on the python implementation to makeup part of the Commons Simulator game. An implemention of Conviction Voting as a smart contract within the Aragon Framework was developed by [1Hive](https://1hive.org/) and is currently being used for community decision making around allocations of their community currency, Honey.
 
 ## Defining the Word Problem
 ___
 
-Suppose a group of people want to coordinate to make a collective decision. Social dynamics such as discussions, signaling, and even changing ones mind based on feedback from others input play an important role in these processes. While the actual decision making process involves a lot of informal processes, in order to be fair the ultimate decision making process still requires a set of formal rules that the community collecively agrees to, which serves to functionally channel a plurality of preferences into a discrete outcomes. In our case we are interested in a procedure which supports asynchronous interactions, an provides visibility into likely outcomes prior to their resolution to serve as a driver of good faith, debate and healthy forms of coalition building. Furthermore, participations should be able to show support for multiple initiatives, and to vary the level of support shown. Participants a quantity of signaling power which may be fixed or variable, homogenous or heterogenous. For the purpose of this document, we'll focus on the case where the discrete decisions to be made are decisions to allocate funds from a shared funding pool towards projects of interest to the community.
+Suppose a group of people want to coordinate to make a collective decision. Social dynamics such as discussions, signaling, and even changing ones mind based on feedback from other's input play an important role in these processes. While the actual decision making process involves a lot of informal processes, in order to be fair the ultimate decision making process still requires a set of formal rules that the community collecively agrees to, which serves to functionally channel a plurality of preferences into discrete outcomes. In our case we are interested in a procedure which supports asynchronous interactions, and provides visibility into likely outcomes prior to their resolution to serve as a driver of good faith, debate, and healthy forms of coalition building. Furthermore, participations should be able to show support for multiple initiatives, and to vary the level of support shown. Participants have a quantity of signaling power which may be fixed or variable, homogenous or heterogenous. For the purpose of this document, we'll focus on the case where the discrete decisions to be made are decisions to allocate funds from a shared funding pool towards projects of interest to the community.
 
 ## Converting to a Math Problem
 ___
@@ -26,7 +26,7 @@ Let $\mathcal{A}$ be the set of participants. Consider a participant $a\in \math
 
 ___
 
-Next, we introduce the idea of proposals.  Consider a proposal $i\in \mathcal{C}$. Any proposal $i$ is associated with a request for resources $r[i]$. Those requested resources would be allocated from a constrained pool of communal resources currently totaling $R$. The pool of resources may become depleted because when a proposal $i$ passes $R^+= R-r[i]$. Therefore it makes sense for us to consider what fraction of the shared resources are being request $\mu_i = \frac{r[i]}{R}$, which means that thre resource depletion from passing proposals can be bounded by requiring $\mu_i < \mu$ where $\mu$ is a constant representing the maximum fraction of the shared resources which can be dispersed by any one proposal. In order for the system to be sustainable a source of new resources is required. In the case where $R$ is funding, new funding can come from revenues, donations, or in some DAO use cases minting tokens.
+Next, we introduce the idea of proposals.  Consider a proposal $i\in \mathcal{C}$. Any proposal $i$ is associated with a request for resources $r[i]$. Those requested resources would be allocated from a constrained pool of communal resources currently totaling $R$. The pool of resources may become depleted because when a proposal $i$ passes $R^+= R-r[i]$. Therefore it makes sense for us to consider what fraction of the shared resources are being requested $\mu_i = \frac{r[i]}{R}$, which means that the resource depletion from passing proposals can be bounded by requiring $\mu_i < \mu$ where $\mu$ is a constant representing the maximum fraction of the shared resources which can be dispersed by any one proposal. In order for the system to be sustainable a source of new resources is required. In the case where $R$ is funding, new funding can come from revenues, donations, or in some DAO use cases minting tokens.
 
 ### Defining Participants Preferences for Proposals
 
@@ -67,7 +67,7 @@ For a deeper exploration of the $alpha$ parameter, please read more in the [Deri
 ## Converting Signals to Discrete Decisions
 ___
 
-Conviction can be considered like a fluctuating kinetic energy, with the Trigger function acting as a required activation energy for proposals to pass. This is the mechanism by which a continuous community preference turns into a discrete action event: passing a proposal. See the [Trigger Function Explanation notebook](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Trigger_Function_Explanation.ipynb) for more details around the trigger function and how it works.
+Conviction can be considered like a fluctuating kinetic energy, with the Trigger function acting as a required activation energy for proposals to pass. This is the mechanism by which a continuous community preference turns into a discrete action event: passing a proposal. 
 
 ### The Trigger Function
 ___
@@ -179,7 +179,7 @@ e.g. $f(z) = \frac{\rho S }{(1-\alpha)(z-\beta)^2}$
 ## Additional Considerations when Deploying CV
 
 * Timescales
-    * whether your system is operating in block times, or more human understandable timescales like hours, days or weeks, these considerations need to be factored into your model
+    * whether your system is operating in block times, or more human understandable timescales like hours, days, or weeks, these considerations need to be factored into your model
 * Minimum candidacy times
     * proposals should be active for a minimum period to ensure appropriate dialog occurs within the community, regardless of level of support
 * Minimum conviction required for small proposals

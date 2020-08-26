@@ -1,11 +1,11 @@
 # Aragon Conviction Voting
 
-This cadCAD model and notebook series is a collaboration between [Aragon Project](aragon.org), [1Hive](1hive.org), [BlockScience](block.science), and [the Commons Stack](commonsstack.org). A brief table of contents follows to explain the file structure of the various documents produced in this collaboration.
+This cadCAD model and notebook series is a collaboration between [Aragon Project](https://aragon.org), [1Hive](https://1hive.org), [BlockScience](https://block.science), and [the Commons Stack](https://commonsstack.org). A brief table of contents follows to explain the file structure of the various documents produced in this collaboration.
 
 ## Table of Contents
 ### 1. Supporting documentation for context
-* [Readme doc]() (you are here): For an overview of Conviction Voting and what exactly we're trying to do with this model, start right here.
-* [Conviction Voting Algorithm Derivation](https://hackmd.io/1VQ9uC1tRKOSJHKRElRN8Q?view): For a deeper understanding of the CV algorithm, including it's mathematical derivation, read this document
+* [Readme doc](https://github.com/BlockScience/Aragon_Conviction_Voting/blob/master/README.md) (you are here): For an overview of Conviction Voting and what exactly we're trying to do with this model, start right here
+* [Conviction Voting Algorithm Derivation](https://hackmd.io/1VQ9uC1tRKOSJHKRElRN8Q?view): For a deeper understanding of the CV algorithm, including its mathematical derivation, read this document
 * [Deriving the Alpha Parameter](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Deriving_Alpha.ipynb): For an in-depth look at the specific considerations around the alpha parameter, which sets the half life decay of conviction, read this notebook
 * [Explaining the Trigger Function](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Trigger_Function_Explanation.ipynb): For an in-depth look at the trigger function equation and how proposals pass from candidate to active status, read this notebook
 
@@ -85,7 +85,7 @@ To see Conviction Voting deployed in smart contracts with a basic user interface
 
 ## Commons Simulator
 
-The [Commons Stack](https://www.commonsstack.org) has been working on a 'Commons Simulator' to facilitate user understanding of these novel governance tools. Progress on Conviction Voting can be viewed in [the Commons Stack Github repo](https://github.com/commons-stack/coodcad/tree/bigrewrite).
+The [Commons Stack](https://www.commonsstack.org) has been working on a 'Commons Simulator' to facilitate user understanding of these novel governance tools. Progress on Conviction Voting can be viewed in [the Commons Stack Github repo](https://github.com/commons-stack).
 
 <br>
 
