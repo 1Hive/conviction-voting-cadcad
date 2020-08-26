@@ -57,7 +57,7 @@ ___
 
 ![pic](https://i.imgur.com/euAei5R.png)
 
-In the above diagram, we examine the proposal view. Proposal $$j$$ with total conviction $$y$$ at time $$t$$ is supported by participants $$a$$, $$b$$ and $$c$$ with $$x$$ conviction. The total conviction $$y$$ at time $$t+1$$ is equal to the total conviction at time $$t$$ decremented by an exponential decay $$\\alpha$$ plus the sum of all conviction from $$k$$ agents in time step $$t$$.
+In the above diagram, we examine the proposal view. Proposal $$j$$ with total conviction $$y$$ at time $$t$$ is supported by participants $$a$$, $$b$$ and $$c$$ with $$x$$ conviction. The total conviction $$y$$ at time $$t+1$$ is equal to the total conviction at time $$t$$ decremented by an exponential decay $$\alpha$$ plus the sum of all conviction from $$k$$ agents in time step $$t$$.
 
 ### Understanding the Alpha Parameter
 ___
@@ -123,8 +123,6 @@ ___
 |$$R_t$$ | Total available resources in the proposal funding pool|
 |$$S_t$$ | Effective supply of tokens available for community governance|
 
-<br> 
-<br>
 
 ## Summary Laws of Motion / State Transition
 
@@ -160,8 +158,6 @@ $$R_{t+1}= R_t- r[i]$$
 * Update Conviction
 $$y_{t+1}[i] =\alpha\cdot y_t[i] + \sum_{a\in \mathcal{A}_t} x[a, i]$$
 
-<br> 
-
 ## Parameters
 
  Notation | Definition|
@@ -173,8 +169,6 @@ $$y_{t+1}[i] =\alpha\cdot y_t[i] + \sum_{a\in \mathcal{A}_t} x[a, i]$$
 
 Recall that the Trigger Function, $$f(z)$$ satisfies $$f:[0,1]\rightarrow \mathbb{R}_+$$
 e.g. $$f(z) = \frac{\rho S }{(1-\alpha)(z-\beta)^2}$$
-
-<br>
 
 ## Additional Considerations when Deploying CV
 
