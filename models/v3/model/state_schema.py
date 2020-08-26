@@ -6,7 +6,7 @@ import numpy as np
 # Schema check for testing simulation results
 state_schema = { 
                 'network': nx.DiGraph(), 
-                'funds':np.float64(),
+                'funds': np.float64(),
                 'sentiment': np.float64(),
                 'effective_supply': np.float64(), 
                 'total_supply': np.float64(),

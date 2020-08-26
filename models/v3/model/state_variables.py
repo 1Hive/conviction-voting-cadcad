@@ -14,5 +14,4 @@ state_variables = {
                 'fractionOfSupplyInPool': 0,
                 'fractionOfProposalStages': 0,
                 'fractionOfFundStages': 0
-
 }

@@ -6,7 +6,6 @@ import matplotlib.colors as colors
 import matplotlib.cm as cmx
 import seaborn as sns
 from copy import deepcopy
-#from cadCAD import configs
 
 
 def trigger_threshold(requested, funds, supply, alpha, params):
@@ -81,7 +80,7 @@ def gen_new_participant(network, new_participant_holdings):
     
     for j in get_nodes_by_type(network, 'proposal'):
         network.add_edge(i, j)
-        
+        # uniform distribution between -1 and 1
         a_rv = a_rv = np.random.uniform(-1,1,1)[0]
         network.edges[(i, j)]['affinity'] = a_rv
         network.edges[(i,j)]['tokens'] = 0 
@@ -90,8 +89,6 @@ def gen_new_participant(network, new_participant_holdings):
     
     return network
     
-
-
 
 def gen_new_proposal(network, funds, supply, funds_requested,params):
     '''
@@ -387,7 +384,6 @@ def affinities_plot(network, dims = (20, 5)):
     '''
     '''
 
-        
     last_props=get_nodes_by_type(network, 'proposal')
     M = len(last_props)
     last_parts=get_nodes_by_type(network, 'participant')
@@ -413,8 +409,6 @@ def affinities_plot(network, dims = (20, 5)):
     plt.title('affinities between participants and proposals')
     plt.ylabel('proposal_id')
     plt.xlabel('participant_id')
-
-
 
 
 def trigger_sweep(field, trigger_func,params,supply=10**9, x_extra=.001):
