@@ -12,7 +12,6 @@ cadCAD models are micro founded with metrics being at the macro or the instituti
 <br>
 
 ## Differential Specification Diagram
-# TODO: FIX IMAGE
 ![](images/Aragon_v3.png)
 
 ## Model File structure
