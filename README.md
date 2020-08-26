@@ -51,7 +51,7 @@ Legacy voting systems face several difficulties in transforming private, distrib
 
 ![](images/cv_background_2.png)
 
-As our governance toolkits continue to expand with novel tools like Conviction Voting, we can consider designing governance systems in the context of the community to which they belong. In the 1Hive community, holding Honey tokens gives you certain rights in the 1Hive organization. Below, we consider the rights granted, how those rights are controlled, the attack vectors they present, and how those vectors can be mitigated.
+As our governance toolkits continue to expand with novel tools like Conviction Voting, we can consider designing governance systems in the context of the community to which they belong. In the 1Hive community, holding Honey tokens gives you certain rights in the 1Hive organization. Above, we consider the rights granted, how those rights are controlled, the attack vectors they present, and how those vectors can be mitigated.
 
 ![](images/cv_background_3.png)
 
