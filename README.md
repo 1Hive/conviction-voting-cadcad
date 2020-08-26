@@ -2,8 +2,6 @@
 
 This cadCAD model and notebook series is a collaboration between [Aragon Project](aragon.org), [1Hive](1hive.org), [BlockScience](block.science), and [the Commons Stack](commonsstack.org). A brief table of contents follows to explain the file structure of the various documents produced in this collaboration.
 
-#### Note: If viewing on Github, matehmatical type setting does not render. To view mathematical rendering, visit the following [link](TODO)
-
 ## Table of Contents
 ### 1. Supporting documentation for context
 * [Readme doc]() (you are here): For an overview of Conviction Voting and what exactly we're trying to do with this model, start right here.
