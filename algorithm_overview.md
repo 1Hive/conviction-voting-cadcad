@@ -20,22 +20,22 @@ Let's start taking these words and constructing a mathematical representation th
 
 ___
 
-Let $\mathcal{A}$ be the set of participants. Consider a participant $a\in \mathcal{A}$. Any participant $a$ has some capacity to participate in the voting process $h[a]$. In a fixed quantity, homogenous system $h[a] = h$ for all $a\in \mathcal{A}$ where $h$ is a constant. The access control process managing how one becomes a participant determines the total supply of "votes" $S = \sum_{a\in \mathcal{A}} = n\cdot h$ where the number of participants is $n = |\mathcal{A}|$. In a smart contract setting, the set $\mathcal{A}$ is a set of addresses, and $h[a]$ is a quantity of tokens held by each address $a\in \mathcal{A}$.
+Let $$\mathcal{A}$$ be the set of participants. Consider a participant $$a\in \mathcal{A}$$. Any participant $$a$$ has some capacity to participate in the voting process $$h[a]$$. In a fixed quantity, homogenous system $$h[a] = h$$ for all $$a\in \mathcal{A}$$ where $$h$$ is a constant. The access control process managing how one becomes a participant determines the total supply of "votes" $$S = \sum_{a\in \mathcal{A}} = n\cdot h$$ where the number of participants is $$n = |\mathcal{A}|$$. In a smart contract setting, the set $$\mathcal{A}$$ is a set of addresses, and $$h[a]$$ is a quantity of tokens held by each address $$a\in \mathcal{A}$$.
 
 ### Defining Proposals & Shared Resources
 
 ___
 
-Next, we introduce the idea of proposals.  Consider a proposal $i\in \mathcal{C}$. Any proposal $i$ is associated with a request for resources $r[i]$. Those requested resources would be allocated from a constrained pool of communal resources currently totaling $R$. The pool of resources may become depleted because when a proposal $i$ passes $R^+= R-r[i]$. Therefore it makes sense for us to consider what fraction of the shared resources are being request $\mu_i = \frac{r[i]}{R}$, which means that thre resource depletion from passing proposals can be bounded by requiring $\mu_i < \mu$ where $\mu$ is a constant representing the maximum fraction of the shared resources which can be dispersed by any one proposal. In order for the system to be sustainable a source of new resources is required. In the case where $R$ is funding, new funding can come from revenues, donations, or in some DAO use cases minting tokens.
+Next, we introduce the idea of proposals.  Consider a proposal $$i\in \mathcal{C}$$. Any proposal $$i$$ is associated with a request for resources $$r[i]$$. Those requested resources would be allocated from a constrained pool of communal resources currently totaling $$R$$. The pool of resources may become depleted because when a proposal $$i$$ passes $$R^+= R-r[i]$$. Therefore it makes sense for us to consider what fraction of the shared resources are being request $$\mu_i = \frac{r[i]}{R}$$, which means that thre resource depletion from passing proposals can be bounded by requiring $$\mu_i < \mu$$ where $$\mu$$ is a constant representing the maximum fraction of the shared resources which can be dispersed by any one proposal. In order for the system to be sustainable a source of new resources is required. In the case where $$R$$ is funding, new funding can come from revenues, donations, or in some DAO use cases minting tokens.
 
 ### Defining Participants Preferences for Proposals
 
 ___
 
-Most of the interesting information in this system is distributed amongst the participants and it manifests as preferences over the proposals. This can be thought of as a matrix $W\in \mathbb{R}^{n \times m}$.
+Most of the interesting information in this system is distributed amongst the participants and it manifests as preferences over the proposals. This can be thought of as a matrix $$W\in \mathbb{R}^{n \times m}$$.
 ![image of participant/proposal affinity matrix](https://i.imgur.com/vERr8Zv.png)
 
-These private hidden signals drive discussions and voting actions. Each participant individually decides how to allocate their votes across the available proposals. Participant $a$ supports proposal $i$ by setting $x[a,i]>0$ but they are limited by their capacity $\sum_{k\in \mathcal{C}} x[a,k] \le h[a]$.  Assuming each participant chooses a subset of the proposals to support, a support graph is formed.
+These private hidden signals drive discussions and voting actions. Each participant individually decides how to allocate their votes across the available proposals. Participant $$a$$ supports proposal $$i$$ by setting $$x[a,i]>0$$ but they are limited by their capacity $$\sum_{k\in \mathcal{C}} x[a,k] \le h[a]$$.  Assuming each participant chooses a subset of the proposals to support, a support graph is formed.
 ![pic](https://i.imgur.com/KRh8tKn.png)
 
 ## Aggregating Information
@@ -49,7 +49,7 @@ In order to break out of the synchronous ad-hoc voting model, a dynamical system
 ___
 
 ![pic](https://i.imgur.com/DZRDwk6.png)
-In the above diagram, we examine the participant view. Participant $a$ with holdings $h$ at time $t$ supports proposals $i$ and $j$ with $x$ conviction. The sum of all conviction asserted by participant $a$ is between 0 and the total holdings of participant $a$.
+In the above diagram, we examine the participant view. Participant $$a$$ with holdings $$h$$ at time $$t$$ supports proposals $$i$$ and $$j$$ with $$x$$ conviction. The sum of all conviction asserted by participant $$a$$ is between 0 and the total holdings of participant $$a$$.
 
 ### System Accounting of Proposal Conviction
 
@@ -57,11 +57,11 @@ ___
 
 ![pic](https://i.imgur.com/euAei5R.png)
 
-In the above diagram, we examine the proposal view. Proposal $j$ with total conviction $y$ at time $t$ is supported by participants $a$, $b$ and $c$ with $x$ conviction. The total conviction $y$ at time $t+1$ is equal to the total conviction at time $t$ decremented by an exponential decay $\\alpha$ plus the sum of all conviction from $k$ agents in time step $t$.
+In the above diagram, we examine the proposal view. Proposal $$j$$ with total conviction $$y$$ at time $$t$$ is supported by participants $$a$$, $$b$$ and $$c$$ with $$x$$ conviction. The total conviction $$y$$ at time $$t+1$$ is equal to the total conviction at time $$t$$ decremented by an exponential decay $$\\alpha$$ plus the sum of all conviction from $$k$$ agents in time step $$t$$.
 
 ### Understanding the Alpha Parameter
 ___
-For a deeper exploration of the $alpha$ parameter, please read more in the [Deriving Alpha notebook](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Deriving_Alpha.ipynb)
+For a deeper exploration of the $$alpha$$ parameter, please read more in the [Deriving Alpha notebook](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Deriving_Alpha.ipynb)
 
 
 ## Converting Signals to Discrete Decisions
@@ -110,55 +110,55 @@ ___
 
  Notation | Definition|
 |--- | --- |
-|$\mathcal{A}_t$ | The set of all governance agents/participants at time t |
-|$\mathcal{C}_t$ | The set of all candidate proposals at time t |
-|$n_t$ | The number of agents/participants at time t |
-|$m_t$ | The number of candidate proposals at time t |
-|$W_t$ | The matrix private preferences of n agents over m proposals |
-|$h_t$ |  The active token holdings of an agent at time t  (Note: the sum of h over all agents is equivalent to the effective supply) |
-|$x_t$ | The sum of tokens supporting a proposal at time t |
-|$X_t$ | The matrix of tokens from n agents supporting m proposals at time t |
-|$y_t$ | Total community conviction for a proposal at time t|
-|$y^*_t$ | Trigger function threshold for a proposal at time t |
-|$R_t$ | Total available resources in the proposal funding pool|
-|$S_t$ | Effective supply of tokens available for community governance|
+|$$\mathcal{A}_t$$ | The set of all governance agents/participants at time t |
+|$$\mathcal{C}_t$$ | The set of all candidate proposals at time t |
+|$$n_t$$ | The number of agents/participants at time t |
+|$$m_t$$ | The number of candidate proposals at time t |
+|$$W_t$$ | The matrix private preferences of n agents over m proposals |
+|$$h_t$$ |  The active token holdings of an agent at time t  (Note: the sum of h over all agents is equivalent to the effective supply) |
+|$$x_t$$ | The sum of tokens supporting a proposal at time t |
+|$$X_t$$ | The matrix of tokens from n agents supporting m proposals at time t |
+|$$y_t$$ | Total community conviction for a proposal at time t|
+|$$y^*_t$$ | Trigger function threshold for a proposal at time t |
+|$$R_t$$ | Total available resources in the proposal funding pool|
+|$$S_t$$ | Effective supply of tokens available for community governance|
 
 <br> 
 <br>
 
 ## Summary Laws of Motion / State Transition
 
-* A new address $a$ joins the community of participants:
-$\mathcal{A}_{t+1} = \mathcal{A}_t \cup \{a\}$
-$h_{t+1}[a]= \Delta h >0$
+* A new address $$a$$ joins the community of participants:
+$$\mathcal{A}_{t+1} = \mathcal{A}_t \cup \{a\}$$
+$$h_{t+1}[a]= \Delta h >0$$
 
-* An address $a$ leaves the community of participants:
-$\mathcal{A}_{t+1} = \mathcal{A}_t \backslash \{a\}$
-$h_{t+1}[a]= 0$
+* An address $$a$$ leaves the community of participants:
+$$\mathcal{A}_{t+1} = \mathcal{A}_t \backslash \{a\}$$
+$$h_{t+1}[a]= 0$$
 
-* A proposal $i$ is added to the set of candidates
-$\mathcal{C}_{t+1} = \mathcal{C}_t \cup \{i\}$
+* A proposal $$i$$ is added to the set of candidates
+$$\mathcal{C}_{t+1} = \mathcal{C}_t \cup \{i\}$$
 
-* A proposal $i$ is removed from the set of candidates
-$\mathcal{C}_{t+1} = \mathcal{C}_t \backslash\{i\}$
+* A proposal $$i$$ is removed from the set of candidates
+$$\mathcal{C}_{t+1} = \mathcal{C}_t \backslash\{i\}$$
 
 * Resources are added to the shared resource pool
-$R_{t+1}= R_t+ \Delta r$
+$$R_{t+1}= R_t+ \Delta r$$
 
 * Update Conviction Required to pass proposals
-$y^*_{t+1} = [\cdots ,f(\mu_i), \cdots]$
-where $\mu_i = \frac{r[i]}{R_t}$
+$$y^*_{t+1} = [\cdots ,f(\mu_i), \cdots]$$
+where $$\mu_i = \frac{r[i]}{R_t}$$
 
 * A participant allocates their support
-$X_{t+1}[a,: ] = [\cdots,x[a,i],\cdots]$
-s.t. $\sum_{i\in \mathcal{C}_t}x[a,i]\le h[a]$
+$$X_{t+1}[a,: ] = [\cdots,x[a,i],\cdots]$$
+s.t. $$\sum_{i\in \mathcal{C}_t}x[a,i]\le h[a]$$
 
-* A proposal is passed given $y_t[i] \ge y^*_t[i]$
-$\mathcal{C}_{t+1} = \mathcal{C}_t \backslash\{i\}$
-$R_{t+1}= R_t- r[i]$
+* A proposal is passed given $$y_t[i] \ge y^*_t[i]$$
+$$\mathcal{C}_{t+1} = \mathcal{C}_t \backslash\{i\}$$
+$$R_{t+1}= R_t- r[i]$$
 
 * Update Conviction
-$y_{t+1}[i] =\alpha\cdot y_t[i] + \sum_{a\in \mathcal{A}_t} x[a, i]$
+$$y_{t+1}[i] =\alpha\cdot y_t[i] + \sum_{a\in \mathcal{A}_t} x[a, i]$$
 
 <br> 
 
@@ -166,13 +166,13 @@ $y_{t+1}[i] =\alpha\cdot y_t[i] + \sum_{a\in \mathcal{A}_t} x[a, i]$
 
  Notation | Definition|
 |--- | --- |
-|$\alpha$ | The decay rate for previously accumulated conviction |
-|$\beta$ | Upper bound on share of funds dispersed in the example Trigger Function|
-|$f(z)$| Trigger function that determines when a proposal has sufficient conviction to pass|
-|$\rho$ | Scale Parameter for the example Trigger Function  |
+|$$\alpha$$ | The decay rate for previously accumulated conviction |
+|$$\beta$$ | Upper bound on share of funds dispersed in the example Trigger Function|
+|$$f(z)$$| Trigger function that determines when a proposal has sufficient conviction to pass|
+|$$\rho$$ | Scale Parameter for the example Trigger Function  |
 
-Recall that the Trigger Function, $f(z)$ satisfies $f:[0,1]\rightarrow \mathbb{R}_+$
-e.g. $f(z) = \frac{\rho S }{(1-\alpha)(z-\beta)^2}$
+Recall that the Trigger Function, $$f(z)$$ satisfies $$f:[0,1]\rightarrow \mathbb{R}_+$$
+e.g. $$f(z) = \frac{\rho S }{(1-\alpha)(z-\beta)^2}$$
 
 <br>
 
