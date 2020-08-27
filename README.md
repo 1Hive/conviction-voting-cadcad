@@ -138,13 +138,13 @@ ___
 
 ___
 
-## Continued Work & Funding
+## Funding Continued Work
 
-This Conviction Voting model will continue to be iterated and modified to suit varying use cases, with increased functionality. If you would like to support this work, please consider voting in support of our proposal in the Aragon Conviction Funding Pilot with your ANT tokens: https://conviction.aragon.org/#/proposal/7
+This Conviction Voting model will continue to be iterated and modified to suit varying use cases, with increased functionality (next steps are discussed at the end of the v3 model notebook). If you would like to support this work, please consider voting in support of our proposal in the Aragon Conviction Funding Pilot with your ANT tokens: https://conviction.aragon.org/#/proposal/7
 
 Alternatively, you can contribute ETH or other ERC-20 tokens to this address: 
 
-**0x422ae3412510d6c877b259dad402ddeaf1fdb28e**
+**[0x422ae3412510d6c877b259dad402ddeaf1fdb28e](https://etherscan.io/address/0x422ae3412510d6c877b259dad402ddeaf1fdb28e)**
 
 All funds will go towards additional work on this model, to continue to build Conviction Voting into a useful tool for collective decision making. 
 
