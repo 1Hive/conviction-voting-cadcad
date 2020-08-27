@@ -1,5 +1,5 @@
 __pycache__
-.vscode
+.vscode/*
 .ipynb_checkpoints
 .DS_Store
 .idea
