@@ -10,7 +10,18 @@ from copy import deepcopy
 
 def trigger_threshold(requested, funds, supply, alpha, params):
     '''
+    Description:
     Function that determines threshold for proposals being accepted. 
+
+    Parameters:
+    requested: float, funds requested
+    funds: float, funds
+    supply: float
+    alpha: float
+    params: dictionary of parameters as floats
+
+    Returns:
+    Threshold value
     '''
 
     share = requested/funds
@@ -22,7 +33,19 @@ def trigger_threshold(requested, funds, supply, alpha, params):
 
 def initial_social_network(network, scale = 1, sigmas=3):
     '''
+    Description:
     Function to initialize network x social network edges
+
+    Parameters:
+    network: network x digraph object
+    scale: optional float
+    sigmas: optional float
+
+    Assumptions:
+    Initialized network x object
+
+    Returns:
+    Updated networkx object with influence edges
     '''
     participants = get_nodes_by_type(network, 'participant')
     
@@ -40,6 +63,17 @@ def initial_conflict_network(network, rate = .25):
     '''
     Definition:
     Function to initialize network x conflict edges
+
+    Parameters:
+    network: network x digraph object
+    rate: optional float
+
+    Assumptions:
+    Initialized network x object
+
+    Returns:
+    Updated networkx object with conflict edges
+
     '''
     proposals = get_nodes_by_type(network, 'proposal')
     
@@ -97,14 +131,16 @@ def gen_new_proposal(network, funds, supply, funds_requested,params):
 
     Parameters:
     network: networkx object
-    funds: 
-    supply:
+    funds: float
+    supply: float
+    funds_requested: float
+    params: dictionary of float parameters
 
     Assumptions:
     Initialized network x object
 
     Returns:
-    Update network x object
+    Update network x object with new proposals
     '''
     j = len([node for node in network.nodes])
     network.add_node(j)
@@ -145,10 +181,9 @@ def get_nodes_by_type(g, node_type_selection):
     g: network x object
     node_type_selection: node type
 
-    Assumptions:
 
     Returns:
-    List column of the desired information as:
+    List column of the desired information 
 
     Example:
     proposals = get_nodes_by_type(network, 'proposal')
@@ -158,6 +193,16 @@ def get_nodes_by_type(g, node_type_selection):
 
 def get_sentimental(sentiment, force, decay=.1):
     '''
+    Definition:
+    Function to update sentiment
+
+    Parameters:
+    sentiment: float
+    force: float
+    decay: optional float
+
+    Returns:
+    returns updated sentiment between 1 and 0.
     '''
     mu = decay
     sentiment = sentiment*(1-mu) + force*mu
@@ -171,14 +216,31 @@ def get_sentimental(sentiment, force, decay=.1):
 
 def get_edges_by_type(g, edge_type_selection):
     '''
-    Functions to extract edges based on type
+    Definition:
+    Function to extract edges based on type
+
+    Parameters:
+    g: network x object
+    edge_type_selection: edge type
+
+
+    Returns:
+    List of edges
     '''
     return [edge for edge in g.edges if g.edges[edge]['type']== edge_type_selection ]
 
 
 def conviction_order(network, proposals):
     '''
+    Definition:
     Function to sort conviction order
+
+    Parameters:
+    network: network x object
+    proposals: list of proposals
+
+    Returns:
+    List of ordered proposals
     '''
     ordered = sorted(proposals, key=lambda j:network.nodes[j]['conviction'] , reverse=True)
     
@@ -188,6 +250,15 @@ def conviction_order(network, proposals):
 
 def social_links(network, participant, scale = 1):
     '''
+    Definition:
+    Function to add influence edges to network
+
+    Parameters:
+    network: network x object
+    participant: int
+
+    Returns:
+    update network x object with social links
     ''' 
     participants = get_nodes_by_type(network, 'participant')
     
@@ -202,8 +273,18 @@ def social_links(network, participant, scale = 1):
     return network
 
 
-def conflict_links(network,proposal ,rate = .25):
+def conflict_links(network,proposal, rate = .25):
     '''
+    Definition:
+    Function to add conflict edges to network
+
+    Parameters:
+    network: network x object
+    proposal: int
+    rate: optional float 
+
+    Returns:
+    update network x object with conflict links
     '''
     proposals = get_nodes_by_type(network, 'proposal')
     
@@ -219,6 +300,16 @@ def conflict_links(network,proposal ,rate = .25):
 
 def social_affinity_booster(network, proposal, participant):
     '''
+    Definition:
+    Function to create aggregate influence for participant
+
+    Parameters:
+    network: network x object
+    proposal: int
+    participant: int
+
+    Returns:
+    Float of aggregated affinity boost
     '''
     participants = get_nodes_by_type(network, 'participant')
     influencers = get_edges_by_type(network, 'influence')
@@ -243,6 +334,17 @@ def social_affinity_booster(network, proposal, participant):
 
 def snap_plot(nets, size_scale = 1/10, dims = (10,10), savefigs=False):
     '''
+    Definition:
+    Function to create plot of participants and proposals
+
+    Parameters:
+    nets: network x object
+    size_scale: optional size scaling parameter
+    dims: optional figure dimension
+    savefigs: optional boolean for saving figure
+
+    Returns:
+    Bipartite graph of participants and proposals at a specific timestep
     '''
 
     last_net = nets[-1]
@@ -355,6 +457,16 @@ def snap_plot(nets, size_scale = 1/10, dims = (10,10), savefigs=False):
 
 def pad(vec, length,fill=True):
     '''
+    Definition:
+    Function to pad vectors for moving to 2d
+
+    Parameters:
+    vec: numpy array
+    length: int
+    fill: optional boolean for filling array with zeros
+
+    Returns:
+    padded numpy array
     '''
     
     if fill:
@@ -370,6 +482,16 @@ def pad(vec, length,fill=True):
 
 def make2D(key, data, fill=False):
     '''
+    Definition:
+    Function to pad vectors for moving to 2d
+
+    Parameters:
+    vec: numpy array
+    length: int
+    fill: optional boolean for filling array with zeros
+
+    Returns:
+    padded numpy array
     '''
     maxL = data[key].apply(len).max()
     newkey = 'padded_'+key
