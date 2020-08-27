@@ -113,17 +113,6 @@ Check out the [cadCAD forum](https://community.cadcad.org/t/python-newbies-setup
 
 ___
 
-## Continued Work & Funding
-
-This Conviction Voting model will continue to be iterated and modified to suit varying use cases, with increased functionality. If you would like to support this work, please consider voting in support of our proposal in the Aragon Conviction Funding Pilot: https://conviction.aragon.org/#/proposal/7
-
-Alternatively, you can contribute ETH or other ERC-20 tokens to this address: 0x422ae3412510d6c877b259dad402ddeaf1fdb28e
-
-All funds will go towards additional work on this model, to continue to build Conviction Voting into a useful tool for collective decision making. 
-
-Thanks very much for your support! 🙏 
-___
-
 ## Further Background Reading
 
 ### Systems Thinking
@@ -146,3 +135,17 @@ ___
 ### Systems Engineering
 
 * http://systems.hitchins.net/systems-engineering/se-monographs/seessence.pdf
+
+___
+
+## Continued Work & Funding
+
+This Conviction Voting model will continue to be iterated and modified to suit varying use cases, with increased functionality. If you would like to support this work, please consider voting in support of our proposal in the Aragon Conviction Funding Pilot with your ANT tokens: https://conviction.aragon.org/#/proposal/7
+
+Alternatively, you can contribute ETH or other ERC-20 tokens to this address: 
+
+**0x422ae3412510d6c877b259dad402ddeaf1fdb28e**
+
+All funds will go towards additional work on this model, to continue to build Conviction Voting into a useful tool for collective decision making. 
+
+Thanks very much for your support! 🙏🎉
