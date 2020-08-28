@@ -504,6 +504,15 @@ def make2D(key, data, fill=False):
 
 def affinities_plot(network, dims = (20, 5)):
     '''
+    Definition:
+    Function to plot affinities between participants and proposals
+
+    Parameters:
+    network: network x object
+    dims: optional figure dimensions 
+
+    Returns:
+    plot of affinities between participants and proposals
     '''
 
     last_props=get_nodes_by_type(network, 'proposal')
@@ -528,13 +537,25 @@ def affinities_plot(network, dims = (20, 5)):
                 cmap = plt.cm.RdYlGn,
                 ax=ax)
 
-    plt.title('affinities between participants and proposals')
-    plt.ylabel('proposal_id')
-    plt.xlabel('participant_id')
+    plt.title('Fffinities between participants and proposals')
+    plt.ylabel('Proposal_id')
+    plt.xlabel('Participant_id')
 
 
 def trigger_sweep(field, trigger_func,params,supply=10**9, x_extra=.001):
     '''
+    Definition:
+    Function to plot trigger function under parameter sweep
+
+    Parameters:
+    field: String of field to be swept, either effective_supply or alpha
+    trigger_func: function of the trigger
+    params: dictionary of parameters
+    supply: optional float of supply
+    x_extra: optional vector value
+
+    Returns:
+    Plot of trigger parameter sweep
     '''
     rho = params['rho'][0]
     beta = params['beta'][0]
@@ -602,6 +623,14 @@ def trigger_sweep(field, trigger_func,params,supply=10**9, x_extra=.001):
     
 def trigger_plotter(share_of_funds,Z, color_label,y, ylabel,cmap='jet'):
     '''
+    Definition:
+    Function to plot trigger function 
+
+    Parameters:
+    share_of_funds: 
+
+    Returns:
+    Plot of trigger parameter sweep
     '''
     dims = (10, 5)
     fig, ax = plt.subplots(figsize=dims)
