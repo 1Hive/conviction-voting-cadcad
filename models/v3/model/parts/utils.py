@@ -8,6 +8,8 @@ import seaborn as sns
 from copy import deepcopy
 
 
+##### Utils
+
 def trigger_threshold(requested, funds, supply, alpha, params):
     '''
     Description:
@@ -331,6 +333,255 @@ def social_affinity_booster(network, proposal, participant):
     
     return np.sum(boosts)
     
+def pad(vec, length,fill=True):
+    '''
+    Definition:
+    Function to pad vectors for moving to 2d
+
+    Parameters:
+    vec: numpy array
+    length: int
+    fill: optional boolean for filling array with zeros
+
+    Returns:
+    padded numpy array
+    '''
+    
+    if fill:
+        padded = np.zeros(length,)
+    else:
+        padded = np.empty(length,)
+        padded[:] = np.nan
+        
+    for i in range(len(vec)):
+        padded[i]= vec[i]
+        
+    return padded
+
+def make2D(key, data, fill=False):
+    '''
+    Definition:
+    Function to pad vectors for moving to 2d
+
+    Parameters:
+    vec: numpy array
+    length: int
+    fill: optional boolean for filling array with zeros
+
+    Returns:
+    padded numpy array
+    '''
+    maxL = data[key].apply(len).max()
+    newkey = 'padded_'+key
+    data[newkey] = data[key].apply(lambda x: pad(x,maxL,fill))
+    reshaped = np.array([a for a in data[newkey].values])
+    
+    return reshaped
+
+def initialize_network(n,m, initial_funds, supply, params):
+    '''
+    Definition:
+    Function to initialize network x object
+
+    Parameters:
+    n: initial number of participants
+    m: initial number of proposals
+    initial_funds: float of funds
+    supply: float of supply
+    params: dictionary of parameter floats
+
+    Returns:
+    initialized network x object for the beginning of the simulation
+    '''
+    # initilize network x graph
+    network = nx.DiGraph()
+    # create participant nodes with type and token holding
+    for i in range(n):
+        network.add_node(i)
+        network.nodes[i]['type']= "participant"
+      
+        # This is an exponential random variable with a shape (loc) and scale parameter to drive the shape of the distributino. 
+        # See the two links below to learn more about it. 
+        # https://en.wikipedia.org/wiki/Exponential_distribution
+        # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.expon.html
+        h_rv = expon.rvs(loc=0.0, scale= supply/n)
+        network.nodes[i]['holdings'] = h_rv 
+        
+        s_rv = np.random.rand() 
+        network.nodes[i]['sentiment'] = s_rv
+    
+    participants = get_nodes_by_type(network, 'participant')
+    initial_supply = np.sum([ network.nodes[i]['holdings'] for i in participants])
+       
+    
+    # Generate initial proposals
+    for ind in range(m):
+        j = n+ind
+        network.add_node(j)
+        network.nodes[j]['type']="proposal"
+        network.nodes[j]['conviction'] = 0
+        network.nodes[j]['status'] = 'candidate'
+        network.nodes[j]['age'] = 0
+        
+        # This is a gamma random variable with a shape (loc) and scale parameter to drive the shape of the distributino. 
+        # See the two links below to learn more about it. 
+        # https://en.wikipedia.org/wiki/Gamma_distribution
+        # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gamma.html
+        r_rv = gamma.rvs(3,loc=0.001, scale=(initial_funds * params['beta'])*.05)
+        network.nodes[j]['funds_requested'] = r_rv
+        
+        network.nodes[j]['trigger']= trigger_threshold(r_rv, initial_funds, initial_supply, params['alpha'],params)
+        
+        for i in range(n):
+            network.add_edge(i, j)
+            
+            rv = np.random.rand()
+            # see below for information on the uniform distribution. In this case, the values will be between -1 and 1
+            # https://numpy.org/doc/stable/reference/random/generated/numpy.random.uniform.html 
+            a_rv = np.random.uniform(-1,1,1)[0]
+            network.edges[(i, j)]['affinity'] = a_rv
+            network.edges[(i, j)]['tokens'] = 0
+            network.edges[(i, j)]['conviction'] = 0
+            network.edges[(i, j)]['type'] = 'support'
+            
+        proposals = get_nodes_by_type(network, 'proposal')
+        total_requested = np.sum([ network.nodes[i]['funds_requested'] for i in proposals])
+        
+        network = initial_conflict_network(network, rate = .25)
+        network = initial_social_network(network, scale = 1)
+        
+    return network
+
+
+def config_initialization(configs,initial_values):
+    '''
+    Definition:
+    Function to initialize network x object during the config.py
+
+    Parameters:
+    configs: cadCAD config object
+    initial_values: dictionary of initial network values
+
+    Returns:
+    Updates state_variables in cadCAD config object with initialized network x object 
+
+
+    '''
+    # Initialize network x
+    for c in configs:
+        c.initial_state = deepcopy(c.initial_state)
+
+        print("Params (config.py) : ", c.sim_config['M'])
+
+        c.initial_state['network'] = initialize_network(initial_values['n'],initial_values['m'],
+                                                initial_values['funds'],
+                                                initial_values['supply'],c.sim_config['M'])
+        
+        return c.initial_state['network']
+    
+    
+def schema_check(simulation_results,schema_dictionary,cadCAD_columns = ['simulation','subset','run','substep','timestep']):
+    '''
+    Description:
+    Function to check simulation variables types against pre-defined schema
+
+    Parameters:
+    simulation_result: cadCAD simulation results dataframe
+    schema_dictionary: state schema dictionary
+    cadCAD_columns: optional, list of cadCAD columns
+    
+    Returns:
+    {'state': Boolean}
+    '''
+    schema_check = {}
+    for i in simulation_results.columns:
+        if i not in cadCAD_columns:
+            result = type(simulation_results[str(i)].values[-1]) == type(schema_dictionary[str(i)])
+            schema_check[i] = result
+    return schema_check       
+
+
+def trigger_sweep(field, trigger_func,params,supply=10**9, x_extra=.001):
+    '''
+    Definition:
+    Function to plot trigger function under parameter sweep
+
+    Parameters:
+    field: String of field to be swept, either effective_supply or alpha
+    trigger_func: function of the trigger
+    params: dictionary of parameters
+    supply: optional float of supply
+    x_extra: optional vector value
+
+    Returns:
+    Plot of trigger parameter sweep
+    '''
+    rho = params['rho'][0]
+    beta = params['beta'][0]
+    xmax=beta- np.sqrt(rho)
+    alpha = params['alpha'][0]
+
+    if field == 'effective_supply':
+        share_of_funds = np.arange(0,xmax*(1+x_extra),.001)
+        total_supply = np.arange(0,supply*10, supply/100) 
+        demo_data_XY = np.outer(share_of_funds,total_supply)
+
+        demo_data_Z0=np.empty(demo_data_XY.shape)
+        demo_data_Z1=np.empty(demo_data_XY.shape)
+        demo_data_Z2=np.empty(demo_data_XY.shape)
+        demo_data_Z3=np.empty(demo_data_XY.shape)
+        for sof_ind in range(len(share_of_funds)):
+            sof = share_of_funds[sof_ind]
+            for ts_ind in range(len(total_supply)):
+                ts = total_supply[ts_ind]
+                tc = ts /(1-alpha)
+                trigger = trigger_func(sof, 1, ts, alpha,beta, rho) 
+                demo_data_Z0[sof_ind,ts_ind] = np.log10(trigger)
+                demo_data_Z1[sof_ind,ts_ind] = trigger
+                demo_data_Z2[sof_ind,ts_ind] = trigger/tc #share of maximum possible conviction
+                demo_data_Z3[sof_ind,ts_ind] = np.log10(trigger/tc)
+        return {'log10_trigger':demo_data_Z0,
+                'trigger':demo_data_Z1,
+                'share_of_max_conv': demo_data_Z2,
+                'log10_share_of_max_conv':demo_data_Z3,
+                'total_supply':total_supply,
+                'share_of_funds':share_of_funds,
+                'alpha':alpha}
+    elif field == 'alpha':
+        #note if alpha >.01 then this will give weird results max alpha will be >1
+        alpha = np.arange(0,1,.001)
+        share_of_funds = np.arange(0,xmax*(1+x_extra),.001)
+        demo_data_XY = np.outer(share_of_funds,alpha)
+
+        demo_data_Z4=np.empty(demo_data_XY.shape)
+        demo_data_Z5=np.empty(demo_data_XY.shape)
+        demo_data_Z6=np.empty(demo_data_XY.shape)
+        demo_data_Z7=np.empty(demo_data_XY.shape)
+        for sof_ind in range(len(share_of_funds)):
+            sof = share_of_funds[sof_ind]
+            for a_ind in range(len(alpha)):
+                ts = supply
+                a = alpha[a_ind]
+                tc = ts /(1-a)
+                trigger = trigger_func(sof, 1, ts, a, beta, rho)
+                demo_data_Z4[sof_ind,a_ind] = np.log10(trigger)
+                demo_data_Z5[sof_ind,a_ind] = trigger
+                demo_data_Z6[sof_ind,a_ind] = trigger/tc #share of maximum possible conviction
+                demo_data_Z7[sof_ind,a_ind] = np.log10(trigger/tc)
+        
+        return {'log10_trigger':demo_data_Z4,
+               'trigger':demo_data_Z5,
+               'share_of_max_conv': demo_data_Z6,
+               'log10_share_of_max_conv':demo_data_Z7,
+               'alpha':alpha,
+               'share_of_funds':share_of_funds,
+               'supply':supply}
+        
+    else:
+        return "invalid field"
+    
+
+### Plotting
 
 def snap_plot(nets, size_scale = 1/10, dims = (10,10), savefigs=False):
     '''
@@ -455,52 +706,6 @@ def snap_plot(nets, size_scale = 1/10, dims = (10,10), savefigs=False):
                 counter = counter+1
             plt.show()
 
-def pad(vec, length,fill=True):
-    '''
-    Definition:
-    Function to pad vectors for moving to 2d
-
-    Parameters:
-    vec: numpy array
-    length: int
-    fill: optional boolean for filling array with zeros
-
-    Returns:
-    padded numpy array
-    '''
-    
-    if fill:
-        padded = np.zeros(length,)
-    else:
-        padded = np.empty(length,)
-        padded[:] = np.nan
-        
-    for i in range(len(vec)):
-        padded[i]= vec[i]
-        
-    return padded
-
-def make2D(key, data, fill=False):
-    '''
-    Definition:
-    Function to pad vectors for moving to 2d
-
-    Parameters:
-    vec: numpy array
-    length: int
-    fill: optional boolean for filling array with zeros
-
-    Returns:
-    padded numpy array
-    '''
-    maxL = data[key].apply(len).max()
-    newkey = 'padded_'+key
-    data[newkey] = data[key].apply(lambda x: pad(x,maxL,fill))
-    reshaped = np.array([a for a in data[newkey].values])
-    
-    return reshaped
-
-
 
 def affinities_plot(network, dims = (20, 5)):
     '''
@@ -542,110 +747,23 @@ def affinities_plot(network, dims = (20, 5)):
     plt.xlabel('Participant_id')
 
 
-def trigger_sweep(field, trigger_func,params,supply=10**9, x_extra=.001):
-    '''
-    Definition:
-    Function to plot trigger function under parameter sweep
-
-    Parameters:
-    field: String of field to be swept, either effective_supply or alpha
-    trigger_func: function of the trigger
-    params: dictionary of parameters
-    supply: optional float of supply
-    x_extra: optional vector value
-
-    Returns:
-    Plot of trigger parameter sweep
-    '''
-    rho = params['rho'][0]
-    beta = params['beta'][0]
-    xmax=beta- np.sqrt(rho)
-    alpha = params['alpha'][0]
-
-    if field == 'effective_supply':
-        share_of_funds = np.arange(0,xmax*(1+x_extra),.001)
-        total_supply = np.arange(0,supply*10, supply/100) 
-        demo_data_XY = np.outer(share_of_funds,total_supply)
-
-        demo_data_Z0=np.empty(demo_data_XY.shape)
-        demo_data_Z1=np.empty(demo_data_XY.shape)
-        demo_data_Z2=np.empty(demo_data_XY.shape)
-        demo_data_Z3=np.empty(demo_data_XY.shape)
-        for sof_ind in range(len(share_of_funds)):
-            sof = share_of_funds[sof_ind]
-            for ts_ind in range(len(total_supply)):
-                ts = total_supply[ts_ind]
-                tc = ts /(1-alpha)
-                trigger = trigger_func(sof, 1, ts, alpha,beta, rho) 
-                demo_data_Z0[sof_ind,ts_ind] = np.log10(trigger)
-                demo_data_Z1[sof_ind,ts_ind] = trigger
-                demo_data_Z2[sof_ind,ts_ind] = trigger/tc #share of maximum possible conviction
-                demo_data_Z3[sof_ind,ts_ind] = np.log10(trigger/tc)
-        return {'log10_trigger':demo_data_Z0,
-                'trigger':demo_data_Z1,
-                'share_of_max_conv': demo_data_Z2,
-                'log10_share_of_max_conv':demo_data_Z3,
-                'total_supply':total_supply,
-                'share_of_funds':share_of_funds,
-                'alpha':alpha}
-    elif field == 'alpha':
-        #note if alpha >.01 then this will give weird results max alpha will be >1
-        alpha = np.arange(0,1,.001)
-        share_of_funds = np.arange(0,xmax*(1+x_extra),.001)
-        demo_data_XY = np.outer(share_of_funds,alpha)
-
-        demo_data_Z4=np.empty(demo_data_XY.shape)
-        demo_data_Z5=np.empty(demo_data_XY.shape)
-        demo_data_Z6=np.empty(demo_data_XY.shape)
-        demo_data_Z7=np.empty(demo_data_XY.shape)
-        for sof_ind in range(len(share_of_funds)):
-            sof = share_of_funds[sof_ind]
-            for a_ind in range(len(alpha)):
-                ts = supply
-                a = alpha[a_ind]
-                tc = ts /(1-a)
-                trigger = trigger_func(sof, 1, ts, a, beta, rho)
-                demo_data_Z4[sof_ind,a_ind] = np.log10(trigger)
-                demo_data_Z5[sof_ind,a_ind] = trigger
-                demo_data_Z6[sof_ind,a_ind] = trigger/tc #share of maximum possible conviction
-                demo_data_Z7[sof_ind,a_ind] = np.log10(trigger/tc)
-        
-        return {'log10_trigger':demo_data_Z4,
-               'trigger':demo_data_Z5,
-               'share_of_max_conv': demo_data_Z6,
-               'log10_share_of_max_conv':demo_data_Z7,
-               'alpha':alpha,
-               'share_of_funds':share_of_funds,
-               'supply':supply}
-        
-    else:
-        return "invalid field"
-    
-def trigger_plotter(share_of_funds,Z, color_label,y, ylabel,cmap='jet'):
-    '''
-    Definition:
-    Function to plot trigger function 
-
-    Parameters:
-    share_of_funds: 
-
-    Returns:
-    Plot of trigger parameter sweep
-    '''
-    dims = (10, 5)
-    fig, ax = plt.subplots(figsize=dims)
-
-    cf = plt.contourf(share_of_funds, y, Z.T, 100, cmap=cmap)
-    cbar=plt.colorbar(cf)
-    plt.axis([share_of_funds[0], share_of_funds[-1], y[0], y[-1]])
-    #ax.set_xscale('log')
-    plt.ylabel(ylabel)
-    plt.xlabel('Share of Funds Requested')
-    plt.title('Trigger Function Map')
-
-    cbar.ax.set_ylabel(color_label)
-    
 def trigger_grid(supply_sweep, alpha_sweep):
+    '''
+    Definition:
+    Function to plot the trigger sweeps
+
+    Parameters:
+    supply_sweep: dictionary of supply sweep 
+    alpha_sweep: dictionary of alpha sweeps
+
+    Returns:
+    grid of 2 matplotib plots
+
+    Example:
+
+    trigger_grid(supply_sweep, alpha_sweep)
+
+    '''
     
     fig, axs = plt.subplots(nrows=2, ncols=1,figsize=(20,20))
     axs = axs.flatten()
@@ -672,129 +790,94 @@ def trigger_grid(supply_sweep, alpha_sweep):
     ylabel = 'Effective Supply'
     alpha = supply_sweep['alpha']
 
-    #max_conv = y/(1-alpha)
-
     cp1=axs[1].contourf(share_of_funds, y, Z.T,100, cmap='jet', )
     axs[1].axis([share_of_funds[0], share_of_funds[-1], y[0], y[-1]])
     axs[1].set_ylabel(ylabel)
     axs[1].set_xlabel('Share of Funds Requested')
     axs[1].set_xticks(np.arange(0,.175,.025))
     axs[1].set_title('Trigger Function Map - Supply sweep; alpha='+str(alpha))
-    #axs[1].set_label('log10 of conviction to trigger')
     cb1=plt.colorbar(cp1, ax=axs[1], ticks=np.arange(0,1.1,.1))
     cb1.set_label('share of max conviction to trigger')
 
 
-def initialize_network(n,m, initial_funds, supply, params):
-    '''
-    Definition:
-    Function to initialize network x object
 
-    Parameters:
-    n: 
-    m:
-    initial_funds:
-    supply:
-    params
-    Assumptions:
-
-    Returns:
-
-    Example:
-    '''
-    # initilize network x graph
-    network = nx.DiGraph()
-    # create participant nodes with type and token holding
-    for i in range(n):
-        network.add_node(i)
-        network.nodes[i]['type']= "participant"
-      
-        # This is an exponential random variable with a shape (loc) and scale parameter to drive the shape of the distributino. 
-        # See the two links below to learn more about it. 
-        # https://en.wikipedia.org/wiki/Exponential_distribution
-        # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.expon.html
-        h_rv = expon.rvs(loc=0.0, scale= supply/n)
-        network.nodes[i]['holdings'] = h_rv 
-        
-        s_rv = np.random.rand() 
-        network.nodes[i]['sentiment'] = s_rv
-    
-    participants = get_nodes_by_type(network, 'participant')
-    initial_supply = np.sum([ network.nodes[i]['holdings'] for i in participants])
-       
-    
-    # Generate initial proposals
-    for ind in range(m):
-        j = n+ind
-        network.add_node(j)
-        network.nodes[j]['type']="proposal"
-        network.nodes[j]['conviction'] = 0
-        network.nodes[j]['status'] = 'candidate'
-        network.nodes[j]['age'] = 0
-        
-        # This is a gamma random variable with a shape (loc) and scale parameter to drive the shape of the distributino. 
-        # See the two links below to learn more about it. 
-        # https://en.wikipedia.org/wiki/Gamma_distribution
-        # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gamma.html
-        r_rv = gamma.rvs(3,loc=0.001, scale=(initial_funds * params['beta'])*.05)
-        network.nodes[j]['funds_requested'] = r_rv
-        
-        network.nodes[j]['trigger']= trigger_threshold(r_rv, initial_funds, initial_supply, params['alpha'],params)
-        
-        for i in range(n):
-            network.add_edge(i, j)
-            
-            rv = np.random.rand()
-            # see below for information on the uniform distribution. In this case, the values will be between -1 and 1
-            # https://numpy.org/doc/stable/reference/random/generated/numpy.random.uniform.html 
-            a_rv = np.random.uniform(-1,1,1)[0]
-            network.edges[(i, j)]['affinity'] = a_rv
-            network.edges[(i, j)]['tokens'] = 0
-            network.edges[(i, j)]['conviction'] = 0
-            network.edges[(i, j)]['type'] = 'support'
-            
-        proposals = get_nodes_by_type(network, 'proposal')
-        total_requested = np.sum([ network.nodes[i]['funds_requested'] for i in proposals])
-        
-        network = initial_conflict_network(network, rate = .25)
-        network = initial_social_network(network, scale = 1)
-        
-    return network
-
-
-def config_initialization(configs,initial_values):
-    '''
-    from copy import deepcopy
-    from cadCAD import configs
-    '''
-    # Initialize network x
-    for c in configs:
-        c.initial_state = deepcopy(c.initial_state)
-
-        print("Params (config.py) : ", c.sim_config['M'])
-
-        c.initial_state['network'] = initialize_network(initial_values['n'],initial_values['m'],
-                                                initial_values['funds'],
-                                                initial_values['supply'],c.sim_config['M'])
-        
-        return c.initial_state['network']
-    
-    
-def schema_check(simulation_results,schema_dictionary,cadCAD_columns = ['simulation','subset','run','substep','timestep']):
+def shape_of_trigger_in_absolute_terms(requests, conviction_required,max_request,
+                                      max_achievable_request,max_achievable_conviction,
+                                      min_required_conviction,log=False):
     '''
     Description:
+    Plot to the demonstrate the trigger function shape, 
+    showing how the amount of conviction required increases as 
+    amount of requested (absolute) funds increases. 
     
     Parameters:
-    simulation_result: cadCAD simulation results dataframe
-    schema_dictionary: state schema dictionary
-    cadCAD_columns: optional, list of cadCAD columns
+    requests: numpy array of requested funds
+    conviction_required: numpy array of conviction required to pass proposals
+    max_request: float of max request, which is beta*funds
+    max_achievable_request: float of r = (\beta -\sqrt\rho)F
+    max_achievable_conviction: float of \frac{S}{1-\alpha}
+    min_required_conviction: float of y^*(0) = \frac{\rho S}{(1-\alpha)\beta^2
+    log: optional boolean of log y scale
     
-    Returns:
-    {'state': Boolean}
+    
     '''
-    schema_check = {}
-    for i in simulation_results.columns:
-        if i not in cadCAD_columns:
-            result = type(simulation_results[str(i)].values[-1]) == type(schema_dictionary[str(i)])
-            schema_check[i] = result
-    return schema_check       
+    plt.figure(figsize=(10, 7))
+    plt.plot(requests, conviction_required)
+    ax= plt.gca().axis()
+    plt.vlines(max_request, 0, ax[3], 'r', '--')
+    plt.vlines(max_achievable_request, 0, ax[3], 'g', '--')
+    plt.hlines(max_achievable_conviction, 0, max_request, 'g', '--')
+    plt.hlines(min_required_conviction, 0, max_request, 'k', '--')
+    
+    if log == False:
+        plt.title("Sample Trigger Function in Absolute Terms; Linear Scale")
+        plt.xlabel("Resources Requested")
+        plt.ylabel("Conviction Required to Pass") 
+    else:
+        plt.title("Sample Trigger Function in Absolute Terms; Log Scale")
+    plt.xlabel("Resources Requested")
+    plt.ylabel("Conviction Required to Pass")
+    plt.gca().set_yscale('log')
+
+
+def shape_of_trigger_in_relative_terms(requests_as_share_of_funds, conviction_required_as_share_of_max
+                                       ,max_request, funds, max_achievable_request,
+                                       max_achievable_conviction,
+                                       min_required_conviction,log=False):
+    '''
+    Description:
+    Plot to demonstrate the trigger function shape, 
+    showing how the amount of conviction required increases as the 
+    proportion of requested  funds (relative to total funds) increases.
+    
+    Parameters:
+    requests_as_share_of_funds: numpy array of requests as share of funds
+    conviction_required_as_share_of_max: numpy array of conviction required as share of maxto pass proposals
+    max_request: float of max request, which is beta*funds
+    funds: float of funds
+    max_achievable_request: float of r = (\beta -\sqrt\rho)F
+    max_achievable_conviction: float of \frac{S}{1-\alpha}
+    min_required_conviction: float of y^*(0) = \frac{\rho S}{(1-\alpha)\beta^2
+    log: optional boolean of log y scale
+    
+    
+    '''
+    plt.figure(figsize=(10, 7))
+    plt.plot(requests_as_share_of_funds, conviction_required_as_share_of_max)
+    ax= plt.gca().axis()
+    plt.vlines(max_request/funds, 0, ax[3], 'r', '--')
+    plt.vlines(max_achievable_request/funds, 0, ax[3], 'g', '--')
+    plt.hlines(1, 0, max_request/funds, 'g', '--')
+    plt.hlines(min_required_conviction/max_achievable_conviction, 0, max_request/funds, 'k', '--')
+
+    
+    if log == False:
+        plt.title("Sample Trigger Function in Relative Terms; Linear Scale")
+        plt.xlabel("Resources Requested as a share of Total Funds")
+        plt.ylabel("Conviction Required to Pass as share of max achievable")
+        plt.gca().set_ylim(0, 1.1) 
+    else:
+        plt.title("Sample Trigger Function in Relative Terms; Log Scale")
+        plt.xlabel("Resources Requested as a share of Total Funds")
+        plt.ylabel("Conviction Required to Pass as share of max achievable")
+        plt.gca().set_yscale('log')
