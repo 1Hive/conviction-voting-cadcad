@@ -742,7 +742,7 @@ def affinities_plot(network, dims = (20, 5)):
                 cmap = plt.cm.RdYlGn,
                 ax=ax)
 
-    plt.title('Fffinities between participants and proposals')
+    plt.title('Affinities between participants and proposals')
     plt.ylabel('Proposal_id')
     plt.xlabel('Participant_id')
 
