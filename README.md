@@ -25,7 +25,7 @@ ___
 
 # Background information & concepts addressed
 
-## What is this cadCAD model trying to do?
+## What does this cadCAD model do?
 In cyber-physical systems like international power grids, global flight networks, or socioeconomic community ecosystems, engineers model simulated replicas of their system, called digital twins. These models help to manage the complexity of systems that have trillions of data points and are constantly in flux. These simulations channel the information into pathways that allow humans to understand what is going on in their ecosystem at a high level, so they can intervene where and as appropriate. (Like hitting a breaker switch when a fault is cleared in a power system).
 
 ![img](https://i.imgur.com/kb4Tnh6.jpg)
