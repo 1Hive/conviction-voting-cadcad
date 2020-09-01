@@ -13,7 +13,7 @@ This cadCAD model and notebook series is a collaboration between [Aragon Project
 
 ### 2. Simulation Notebooks
 
-* [V3 - 1Hive model](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v3/Aragon_Conviction_Voting_Model.ipynb): The latest notebook iteration of CV, modeling 1Hive's deployment
+* [V3 - 1Hive model](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/a5bf8accbc832c34e3cc7f206106edd89ea0aa7d/models/v3/Aragon_Conviction_Voting_Model.ipynb): The latest notebook iteration of CV, modeling 1Hive's deployment
 * [V2 - Increased complexity model](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v2/Aragon_Conviction_Voting_Model.ipynb): a former version of the CV model with increased mechanism complexity over v1
 * [V1 - Initial model](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/models/v1/Aragon_Conviction_Voting_Model.ipynb): the simplest version of the CV model. Start here if you are looking to understand and replicate this model in cadCAD
 * [Model Structure](https://nbviewer.jupyter.org/github/BlockScience/Aragon_Conviction_Voting/blob/master/model_structure.ipynb): a deeper look into the structure of the cadCAD model. Read this document if you are learning how to work with system modelling in cadCAD.
