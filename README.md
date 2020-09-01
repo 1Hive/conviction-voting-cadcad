@@ -85,7 +85,7 @@ To see Conviction Voting deployed in smart contracts with a basic user interface
 
 ## Commons Simulator
 
-The [Commons Stack](https://www.commonsstack.org) has been working on a 'Commons Simulator' to facilitate user understanding of these novel governance tools. Progress on Conviction Voting can be viewed in [the Commons Stack Github repo](https://github.com/commons-stack).
+The [Commons Stack](https://www.commonsstack.org) has been working on a 'Commons Simulator' to facilitate user understanding of these novel governance tools, by casting them in a futuristic solarpunk storyline. Progress on the simulation and it's Conviction Voting work can be viewed in [the Commons Stack Github repo](https://github.com/commons-stack/coodcad).
 
 <br>
 
